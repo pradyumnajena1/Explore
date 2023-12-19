@@ -1,0 +1,37 @@
+package epp.stacknqueue;
+
+import java.util.Stack;
+
+public class PBBMatch {
+
+    public static void main(String[] args) {
+        String s = "()[]{(()()}";
+        boolean match = verifyPBBMatch(s);
+        System.out.println(match);
+    }
+
+    private static boolean verifyPBBMatch(String s) {
+        Stack<Character> stack = new Stack<>();
+        for(int i=0;i<s.length();i++){
+            char c = s.charAt(i);
+            if( c =='(' || c =='{'||c =='['){
+                stack.push(c);
+            }
+            if(c==')'){
+                if(stack.pop()!='('){
+                    return false;
+                }
+
+            } else if (c==']') {
+                if(stack.pop()!='['){
+                    return false;
+                }
+            } else if (c=='}') {
+                if(stack.pop()!='{'){
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+}
