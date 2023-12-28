@@ -37,9 +37,9 @@ public class Triplet <T,U,V>{
     @Override
     public String toString() {
         return new StringJoiner(", ", Triplet.class.getSimpleName() + "[", "]")
-                .add("first=" + first)
-                .add("second=" + second)
-                .add("third=" + third)
+                .add("f=" + first)
+                .add("s=" + second)
+                .add("t=" + third)
                 .toString();
     }
 
