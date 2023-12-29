@@ -1,8 +1,11 @@
 package hackerrank.easy;
 
+import commons.IntegerUtils;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 
 public class BetweenTwoSets {
     public static void main(String[] args) {
@@ -14,8 +17,8 @@ public class BetweenTwoSets {
         // Write your code here
         smaller.sort(Comparator.naturalOrder());
         bigger.sort(Comparator.naturalOrder());
-        int gcd = findGCD(bigger);
-        int lcm = findLCM(smaller);
+        int gcd = IntegerUtils.findGCD(bigger);
+        int lcm = IntegerUtils.findLCM(smaller);
 
         //System.out.println(lcm+" "+gcd);
         int count = 0;
@@ -30,35 +33,4 @@ public class BetweenTwoSets {
     }
 
 
-
-    static int gcd(int a, int b) {
-        if (a == 0)
-            return b;
-        return gcd(b % a, a);
-    }
-
-    static int findLCM(List<Integer> arr) {
-        int result = arr.get(0);
-        for (int element : arr) {
-            if (element == 0) {
-                return 0;
-            }
-            result = result * element / gcd(result, element);
-        }
-
-        return result;
-    }
-
-    static int findGCD(List<Integer> arr) {
-        int result = arr.get(0);
-        for (int element : arr) {
-            result = gcd(result, element);
-
-            if (result == 1) {
-                return 1;
-            }
-        }
-
-        return result;
-    }
 }
