@@ -57,7 +57,7 @@ public class SegmentTree {
         this.function = function;
         this.defaultValue = defaultValue;
         int[] segmentTree = new int[2 * size];
-        System.arraycopy(values, 0, segmentTree, size, size);
+        System.arraycopy(values, 0, segmentTree, size, values.length);
         int a = size;
         int b = 2 * size - 1;
         while (a < b) {
@@ -92,6 +92,9 @@ public class SegmentTree {
         }
     }
 
+    public int getSize() {
+        return size;
+    }
 
     private static int nextPowerOf2(int n) {
         int highestOneBit = Integer.highestOneBit(n);

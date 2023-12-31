@@ -13,19 +13,13 @@ public class RangeMinQuery {
 
     public RangeMinQuery(int[] values) {
         this.values = values;
-        int i = 0;
-        while (1<< i <= values.length) {
-            i++;
-        }
+        int highestSetBit =31-Integer.numberOfLeadingZeros(values.length);
+        int[][] sparseTable = new int[highestSetBit+1][values.length];
+        System.arraycopy(values,0,sparseTable[0],0,values.length);
 
-        int[][] sparseTable = new int[i][values.length];
-        for (int j = 0; j < values.length; j++) {
-            sparseTable[0][j] = values[j];
-        }
         for (int row = 1; row < sparseTable.length; row++) {
             int windowSize = 1<<row;
             for (int j = 0; j < values.length; j++) {
-
                 sparseTable[row][j] = Math.min(sparseTable[row - 1][j], (j + windowSize / 2 < values.length ? sparseTable[row - 1][j + windowSize / 2] : Integer.MAX_VALUE));
             }
         }
@@ -36,10 +30,7 @@ public class RangeMinQuery {
 
     int rangeMin(int a, int b) {
 
-        int row = 0;
-        while (1 << (row + 1) <= (b - a + 1)) {
-            row++;
-        }
+        int row =  31-Integer.numberOfLeadingZeros(b-a+1);
         int rangeSize = 1 << row;
         return Math.min(sparseTable[row][a], ( b - rangeSize + 1 >= 0 ? sparseTable[row][b - rangeSize + 1] : Integer.MAX_VALUE));
     }
