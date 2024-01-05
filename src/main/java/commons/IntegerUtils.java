@@ -4,9 +4,13 @@ import java.util.List;
 
 public class IntegerUtils {
    public static int gcd(int a, int b) {
-        if (a == 0)
-            return b;
-        return gcd(b % a, a);
+        if (b == 0)
+            return a;
+        return gcd(b, a%b);
+    }
+    public static int lcm(int a, int b) {
+
+        return a*b/ gcd(a, b);
     }
 
     public static int findLCM(List<Integer> arr) {

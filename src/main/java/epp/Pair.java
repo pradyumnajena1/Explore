@@ -48,8 +48,8 @@ public class Pair<T,U> {
     @Override
     public String toString() {
         return new StringJoiner(", ", Pair.class.getSimpleName() + "[", "]")
-                .add("first=" + first)
-                .add("second=" + second)
+                .add("f=" + first)
+                .add("s=" + second)
                 .toString();
     }
 }

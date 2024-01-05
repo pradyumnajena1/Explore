@@ -3,7 +3,7 @@ package epp;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class Triplet <T,U,V>{
+public class Triplet <T,U,V> {
     T first;
     U second;
     V third;

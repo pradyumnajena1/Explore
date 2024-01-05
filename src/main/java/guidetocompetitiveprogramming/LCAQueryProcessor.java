@@ -34,10 +34,12 @@ public class LCAQueryProcessor {
         } else {
             if (al < bl) {
 
-                return getLowestCommonAncestor(a, rootedTreeAncestor.ancestor(b, bl - al), al);
+                int ancestor = rootedTreeAncestor.ancestor(b, bl - al);
+                return getLowestCommonAncestor(a, ancestor, al);
             } else {
 
-                return getLowestCommonAncestor(rootedTreeAncestor.ancestor(a, al - bl), b, bl);
+                int ancestor = rootedTreeAncestor.ancestor(a, al - bl);
+                return getLowestCommonAncestor(ancestor, b, bl);
             }
 
         }
@@ -45,18 +47,19 @@ public class LCAQueryProcessor {
 
     private int getLowestCommonAncestor(int a, int b, int level) {
         int low = 1;
-        int high = level - 1;
-        int lowest = high;
+        int high = level ;
+        int lowest = 1;
         while (low <= high) {
             int mid = (low + high) / 2;
-            if (rootedTreeAncestor.ancestor(a, mid) == rootedTreeAncestor.ancestor(b, mid)) {
+
+            if (rootedTreeAncestor.ancestor(a,level- mid) == rootedTreeAncestor.ancestor(b,level- mid)) {
                 lowest = mid;
-                high = mid - 1;
-            } else {
                 low = mid + 1;
+            } else {
+                high = mid - 1;
             }
         }
-        return rootedTreeAncestor.ancestor(a, lowest);
+        return rootedTreeAncestor.ancestor(a,level- lowest);
     }
 
     private HashMap<Integer, Integer> getIndexMap() {
@@ -69,7 +72,7 @@ public class LCAQueryProcessor {
     }
 
     private void dfsDepths(List<List<Integer>> adjList, int root, int parent, int level, AtomicInteger index) {
-        int currentIndex = index.getAndIncrement();
+        int currentIndex = index.incrementAndGet();
         nodeIds[currentIndex] = root;
         levels[currentIndex] = level + 1;
         for (int c : adjList.get(root)) {

@@ -13,6 +13,13 @@ public class DistanceBetweenNodesQueryProcessor {
 
     }
 
+
+
+    public int getDistance(int a, int b) {
+        int lca = lcaQueryProcessor.getLowestCommonAncestor(a, b);
+        return lcaQueryProcessor.getDepth(a) + lcaQueryProcessor.getDepth(b) - 2 * lcaQueryProcessor.getDepth(lca);
+    }
+
     public static void main(String[] args) {
         List<List<Integer>> adjList = new ArrayList<>();
         adjList.add(new ArrayList<>());
@@ -27,10 +34,5 @@ public class DistanceBetweenNodesQueryProcessor {
 
         DistanceBetweenNodesQueryProcessor distanceBetweenNodesQueryProcessor = new DistanceBetweenNodesQueryProcessor(adjList);
         System.out.println(distanceBetweenNodesQueryProcessor.getDistance(5, 8));
-    }
-
-    private int getDistance(int a, int b) {
-        int lca = lcaQueryProcessor.getLowestCommonAncestor(a, b);
-        return lcaQueryProcessor.getDepth(a) + lcaQueryProcessor.getDepth(b) - 2 * lcaQueryProcessor.getDepth(lca);
     }
 }
