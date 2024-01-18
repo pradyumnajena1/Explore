@@ -3,10 +3,7 @@ package hackerrank.medium;
 import epp.binaryTree.BinaryTreeNode;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -41,6 +38,8 @@ public class ArrayManipulation {
                 throw new RuntimeException(ex);
             }
         });
+
+
 
         long result = arrayManipulation(n, queries);
 

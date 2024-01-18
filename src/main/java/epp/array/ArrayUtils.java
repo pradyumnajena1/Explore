@@ -18,6 +18,19 @@ public class ArrayUtils {
         System.out.println(firstIndexOf(integers, integers[2]));
     }
 
+  public   static void rangeCheck(int arrayLength, int fromIndex, int toIndex) {
+        if (fromIndex > toIndex) {
+            throw new IllegalArgumentException(
+                    "fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
+        }
+        if (fromIndex < 0 ||  fromIndex >= arrayLength) {
+            throw new ArrayIndexOutOfBoundsException(fromIndex);
+        }
+        if (  toIndex >= arrayLength) {
+            throw new ArrayIndexOutOfBoundsException(toIndex);
+        }
+    }
+
     public static void swap(int[] array, int i, int j) {
         int temp = array[i];
         array[i] = array[j];
@@ -345,6 +358,10 @@ public class ArrayUtils {
     }
 
     public static void printArray(int[] array) {
+
+        System.out.println(Arrays.toString(array));
+    }
+    public static void printArray(long[] array) {
 
         System.out.println(Arrays.toString(array));
     }

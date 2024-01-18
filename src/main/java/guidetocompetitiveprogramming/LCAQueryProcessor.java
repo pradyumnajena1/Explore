@@ -26,7 +26,7 @@ public class LCAQueryProcessor {
         this.indexMap = getIndexMap();
     }
 
-    int getLowestCommonAncestor(int a, int b) {
+    public int getLowestCommonAncestor(int a, int b) {
         int al = levels[indexMap.get(a)];
         int bl = levels[indexMap.get(b)];
         if (al == bl) {

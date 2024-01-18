@@ -9,7 +9,7 @@ public class NearestRedNodeQueryProcessor {
 
     public NearestRedNodeQueryProcessor(List<List<Integer>> adjList) {
         this.distanceBetweenNodesQueryProcessor= new DistanceBetweenNodesQueryProcessor(adjList);
-        this. centroidDecomposition = new CentroidDecomposition(adjList);
+        this. centroidDecomposition = new CentroidDecomposition(adjList.size()+1, adjList);
         ans = new int[adjList.size()];
         Arrays.fill(ans,Integer.MAX_VALUE);
     }

@@ -29,11 +29,11 @@ public class MedianCalculator {
         }
     }
 
-    public Integer getMedian() {
+    public Double getMedian() {
         if (smaller.size() > bigger.size()) {
-            return smaller.peek();
+            return Double.valueOf( smaller.peek());
         } else {
-            return (smaller.peek() + bigger.peek()) / 2;
+            return  Double.valueOf (smaller.peek() + bigger.peek()) / 2;
         }
     }
 }

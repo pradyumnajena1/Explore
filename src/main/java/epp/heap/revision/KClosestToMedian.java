@@ -18,7 +18,7 @@ public class KClosestToMedian {
         for(int value:values){
             calculator.add(value);
         }
-        int median = calculator.getMedian();
+        int median = calculator.getMedian().intValue();
         System.out.println(median);
         Comparator<Integer> comparator = Comparator.comparingInt((Integer x) -> Math.abs(x - median));
         PriorityQueue<Integer> priorityQueue =

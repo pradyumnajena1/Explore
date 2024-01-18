@@ -7,21 +7,22 @@ import java.util.*;
 public class CentroidDecomposition {
 
 
-    public static   int MaxNodes = 1024;
+
     private List<List<Integer>> originalTree;
+    private int MaxNodes;
     private final int rootCentroid;
-    private List<Set<Integer>> centroidTree;
+    private List<List<Integer>> centroidTree;
     private int[] parent;
     private boolean[] centroidMarked;
 
-    public CentroidDecomposition(List<List<Integer>> adjList) {
-        MaxNodes = adjList.size();
+    public CentroidDecomposition(int MaxNodes, List<List<Integer>> adjList) {
+       this. MaxNodes = MaxNodes;
         this.originalTree = adjList;
         this.centroidMarked = new boolean[MaxNodes];
         this.parent = new int[MaxNodes];
         this.centroidTree = new ArrayList<>();
         for(int i=0;i<adjList.size();i++){
-            this.centroidTree.add(new HashSet<>());
+            this.centroidTree.add(new ArrayList<>());
         }
         this.rootCentroid = decomposeTree(1);
         parent[rootCentroid] = rootCentroid;
@@ -29,6 +30,8 @@ public class CentroidDecomposition {
         System.out.println(centroidTree);
         ArrayUtils.printArray(parent);
     }
+
+
 
     private int decomposeTree(int root) {
         int treeCentroid = getCentroid(root);
@@ -46,6 +49,12 @@ public class CentroidDecomposition {
         }
 
         return treeCentroid;
+    }
+    public List<List<Integer>> getCentroidTree(){
+        return centroidTree;
+    }
+    public int getRootCentroid(){
+        return rootCentroid;
     }
 
     private int getCentroid(int root) {
@@ -110,6 +119,6 @@ public class CentroidDecomposition {
         adjList.add(new ArrayList<>(Set.of(2, 8)));
         adjList.add(new ArrayList<>(Set.of(4)));
         adjList.add(new ArrayList<>(Set.of(6)));
-        CentroidDecomposition centroidDecomposition = new CentroidDecomposition(adjList);
+        CentroidDecomposition centroidDecomposition = new CentroidDecomposition(adjList.size(), adjList);
     }
 }

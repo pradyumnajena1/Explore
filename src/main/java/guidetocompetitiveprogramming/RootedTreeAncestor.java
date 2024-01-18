@@ -22,7 +22,7 @@ public class RootedTreeAncestor {
                 anscestor[row][col] = anscestor[row - 1][anscestor[row - 1][col]];
             }
         }
-        ArrayUtils.print2DArray(anscestor);
+       // ArrayUtils.print2DArray(anscestor);
 
     }
 
