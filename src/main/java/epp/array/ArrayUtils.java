@@ -219,6 +219,13 @@ public class ArrayUtils {
         System.out.println();
 
     }
+    public static void print2DArray(boolean[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.println(Arrays.toString(array[i]));
+        }
+        System.out.println();
+
+    }
 
     public static void print2DArray(char[][] array) {
         for (int i = 0; i < array.length; i++) {

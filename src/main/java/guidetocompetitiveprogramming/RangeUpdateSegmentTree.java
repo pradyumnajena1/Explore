@@ -2,10 +2,14 @@ package guidetocompetitiveprogramming;
 
 import epp.array.ArrayUtils;
 
+import java.util.List;
+
 public class RangeUpdateSegmentTree {
     private final SegmentTree segmentTree;
 
-
+    public RangeUpdateSegmentTree(List<Integer> values) {
+        this(values.stream().mapToInt(Integer::intValue).toArray());
+    }
     public RangeUpdateSegmentTree(int[] values) {
         ArrayUtils.printArray(values);
         for(int i = values.length-1;i>=1;i--){

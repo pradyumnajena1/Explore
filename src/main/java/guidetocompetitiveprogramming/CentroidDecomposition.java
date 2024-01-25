@@ -5,42 +5,37 @@ import epp.array.ArrayUtils;
 import java.util.*;
 
 public class CentroidDecomposition {
-
-
-
-    private List<List<Integer>> originalTree;
-    private int MaxNodes;
+    private final List<List<Integer>> originalTree;
+    private final int MaxNodes;
     private final int rootCentroid;
-    private List<List<Integer>> centroidTree;
-    private int[] parent;
-    private boolean[] centroidMarked;
+    private final List<List<Integer>> centroidTree;
+    private final int[] parent;
+
 
     public CentroidDecomposition(int MaxNodes, List<List<Integer>> adjList) {
        this. MaxNodes = MaxNodes;
         this.originalTree = adjList;
-        this.centroidMarked = new boolean[MaxNodes];
-        this.parent = new int[MaxNodes];
         this.centroidTree = new ArrayList<>();
-        for(int i=0;i<adjList.size();i++){
+        this.parent = new int[MaxNodes+1];
+        for(int i=0;i<=MaxNodes ;i++){
             this.centroidTree.add(new ArrayList<>());
         }
-        this.rootCentroid = decomposeTree(1);
+        boolean[] centroidMarked = new boolean[MaxNodes+1];
+        this.rootCentroid = decomposeTree(1,centroidMarked);
         parent[rootCentroid] = rootCentroid;
+      //  System.out.println(centroidTree);
 
-        System.out.println(centroidTree);
-        ArrayUtils.printArray(parent);
     }
 
 
 
-    private int decomposeTree(int root) {
-        int treeCentroid = getCentroid(root);
 
-        System.out.print(treeCentroid + " ");
 
+    private int decomposeTree(int root, boolean[] centroidMarked) {
+        int treeCentroid = getCentroid(root,centroidMarked);
         for (int c : originalTree.get(treeCentroid)) {
             if (!centroidMarked[c]) {
-                int subtreeCentroid = decomposeTree(c);
+                int subtreeCentroid = decomposeTree(c, centroidMarked);
 
                 centroidTree.get(treeCentroid).add(subtreeCentroid);
                 centroidTree.get(subtreeCentroid).add(treeCentroid);
@@ -50,29 +45,22 @@ public class CentroidDecomposition {
 
         return treeCentroid;
     }
-    public List<List<Integer>> getCentroidTree(){
-        return centroidTree;
-    }
-    public int getRootCentroid(){
-        return rootCentroid;
-    }
+    private int getCentroid(int root, boolean[] centroidMarked) {
 
-    private int getCentroid(int root) {
-
-        int[] subTreeSizes = new int[MaxNodes];
-        boolean[] visited = new boolean[MaxNodes];
-
+        int[] subTreeSizes = new int[MaxNodes+1];
+        boolean[] visited = new boolean[MaxNodes+1];
         Arrays.fill(subTreeSizes, 0);
         Arrays.fill(visited, false);
 
-        dfsSize(root, visited, subTreeSizes);
-        int centroid = dfsCentroid(root, subTreeSizes, visited, subTreeSizes[root]);
+        dfsSize(root, visited, subTreeSizes,centroidMarked);
+        Arrays.fill(visited, false);
+        int centroid = dfsCentroid(root, subTreeSizes, visited, subTreeSizes[root],centroidMarked);
         centroidMarked[centroid] = true;
         return centroid;
 
     }
 
-    private int dfsCentroid(int root, int[] sizes, boolean[] visited, int n) {
+    private int dfsCentroid(int root, int[] sizes, boolean[] visited, int n, boolean[] centroidMarked) {
         visited[root] = true;
         boolean iscentroid = true;
         int maxChildId = 0;
@@ -89,7 +77,7 @@ public class CentroidDecomposition {
         if (iscentroid && n - sizes[root] <= n / 2) {
             return root;
         }
-        return dfsCentroid(maxChildId, sizes, visited, n);
+        return dfsCentroid(maxChildId, sizes, visited, n, centroidMarked);
 
     }
     public int getParent(int node){
@@ -97,15 +85,21 @@ public class CentroidDecomposition {
         return parent[node];
     }
 
-    private void dfsSize(int root, boolean[] visited, int[] subTreeSizes) {
+    private void dfsSize(int root, boolean[] visited, int[] subTreeSizes, boolean[] centroidMarked) {
         visited[root] = true;
         subTreeSizes[root] = 1;
         for (int c : originalTree.get(root)) {
             if (!visited[c] && !centroidMarked[c]) {
-                dfsSize(c, visited, subTreeSizes);
+                dfsSize(c, visited, subTreeSizes, centroidMarked);
                 subTreeSizes[root] += subTreeSizes[c];
             }
         }
+    }
+    public List<List<Integer>> getCentroidTree(){
+        return centroidTree;
+    }
+    public int getRootCentroid(){
+        return rootCentroid;
     }
 
     public static void main(String[] args) {

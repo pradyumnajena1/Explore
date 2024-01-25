@@ -2,9 +2,7 @@ package guidetocompetitiveprogramming;
 
 import epp.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -17,6 +15,12 @@ public class PrimeFactors {
         System.out.println(numOfFactors(12));
         System.out.println(sumOfFactors(12));
         System.out.println(numPrimesLessThanEqual(100));
+
+        System.out.println(getAllFactors(100));
+        System.out.println(getAllFactors(101));
+        System.out.println(getAllFactors(102));
+        System.out.println(getAllFactors(103));
+        System.out.println(getAllFactors(104));
     }
 
     public static boolean isPrime(int n) {
@@ -41,6 +45,29 @@ public class PrimeFactors {
             primeFactors.add(n);
         }
         return primeFactors;
+    }
+
+    public static SortedSet<Integer> getAllFactors(int n){
+        List<Pair<Integer, Integer>> primeWithPower = primeFactorsWithPower(n);
+       return getAllFactors(primeWithPower);
+    }
+
+    private static SortedSet<Integer> getAllFactors(List<Pair<Integer, Integer>> primeWithPower) {
+        SortedSet<Integer> result = new TreeSet<>();
+        if(primeWithPower.isEmpty()){
+            result.add(1);
+            return result;
+        }
+        Pair<Integer, Integer> pair = primeWithPower.get(0);
+        SortedSet<Integer> partial = getAllFactors(primeWithPower.subList(1, primeWithPower.size()));
+        for(int i=0;i<=pair.getSecond();i++){
+            int q =  (int) Math.pow(pair.getFirst(),i);
+            for(int p:partial){
+                result.add( q* p);
+            }
+        }
+
+        return result;
     }
 
     public static int numOfFactors(int n) {

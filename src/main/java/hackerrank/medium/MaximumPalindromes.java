@@ -25,25 +25,29 @@ public class MaximumPalindromes {
                  String substring = s.substring(i,j);
 
                  Map<Character, Long> frequencies = substring.chars().mapToObj(x -> Character.valueOf((char) x)).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-                 List<Integer> permGroup = new ArrayList<>();
-                 int oddfreqCount = 0;
-                 for(long frequency:frequencies.values()){
-                     if(frequency%2==1){
-                         oddfreqCount++;
-                     }
-                     if(frequency/2!=0){
-                         permGroup.add((int) (frequency/2));
-                     }
-                 }
+                 int numPerm = getNumPerm(frequencies);
                  Pair<Integer, Integer> key = new Pair<>(i, j - 1);
-                 System.out.println(key);
-                 System.out.println(frequencies);
-                 System.out.println(permGroup);
-                 int numPerm =  computePermutation(permGroup);
-                 cache.put(key,numPerm*( oddfreqCount>1? oddfreqCount:1));
+                 cache.put(key,numPerm);
 
              }
          }
+    }
+
+    private static int getNumPerm(Map<Character, Long> frequencies) {
+        List<Integer> permGroup = new ArrayList<>();
+        int oddfreqCount = 0;
+        for(long frequency: frequencies.values()){
+            if(frequency%2==1){
+                oddfreqCount++;
+            }
+            if(frequency/2!=0){
+                permGroup.add((int) (frequency/2));
+            }
+        }
+
+        int numPerm =  computePermutation(permGroup);
+        numPerm = numPerm*(Math.max(oddfreqCount, 1));
+        return numPerm;
     }
 
     private static int computePermutation(List<Integer> permGroup) {
