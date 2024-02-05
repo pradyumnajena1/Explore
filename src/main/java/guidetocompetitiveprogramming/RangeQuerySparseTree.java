@@ -34,7 +34,7 @@ public class RangeQuerySparseTree {
             }
         }
         this.sparseTable = sparseTable;
-        ArrayUtils.print2DArray(sparseTable);
+       // ArrayUtils.print2DArray(sparseTable);
 
     }
 

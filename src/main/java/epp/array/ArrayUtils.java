@@ -55,6 +55,13 @@ public class ArrayUtils {
         }
         return array;
     }
+    public static long[] randomLongArray(int size, long minValue, long maxValue) {
+        long[] array = new long[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = minValue + (long) (Math.random() * (maxValue - minValue));
+        }
+        return array;
+    }
 
     public static double[] randomArray(int size, double minValue, double maxValue) {
         double[] array = new double[size];
@@ -213,6 +220,13 @@ public class ArrayUtils {
     }
 
     public static void print2DArray(int[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.println(Arrays.toString(array[i]));
+        }
+        System.out.println();
+
+    }
+    public static void print2DArray(long[][] array) {
         for (int i = 0; i < array.length; i++) {
             System.out.println(Arrays.toString(array[i]));
         }

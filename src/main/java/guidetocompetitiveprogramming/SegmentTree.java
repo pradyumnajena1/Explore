@@ -12,47 +12,10 @@ public class SegmentTree {
     private final BiFunction<Integer, Integer, Integer> function;
     private final int defaultValue;
 
-    public static void main(String[] args) {
-        SegmentTree segmentTree = new SegmentTree(new int[]{5, 8, 6, 3, 2, 7, 2, 6}, Integer::sum, 0);
-        System.out.println(segmentTree.rangeResult(1, 5));
-        segmentTree.increment(3, 5);
-        System.out.println(segmentTree.rangeResult(1, 5));
 
 
-        segmentTree = new SegmentTree(new int[]{5, 8, 6, 3, 2, 7, 2, 6}, Math::min, Integer.MAX_VALUE);
-        System.out.println(segmentTree.rangeResult(1, 5));
-        segmentTree.increment(3, -5);
-        System.out.println(segmentTree.rangeResult(1, 5));
-
-        segmentTree = new SegmentTree(new int[]{5, 8, 6, 3, 2, 7, 2, 6}, Math::max, Integer.MIN_VALUE);
-        System.out.println(segmentTree.rangeResult(1, 5));
-        segmentTree.increment(3, 6);
-        System.out.println(segmentTree.rangeResult(1, 5));
-
-
-        segmentTree = new SegmentTree(new int[]{15, 25, 9, 3, 12, 27, 21, 16}, IntegerUtils::gcd, 0);
-        System.out.println(segmentTree.rangeResult(1, 5));
-        segmentTree.increment(3, 6);
-        System.out.println(segmentTree.rangeResult(1, 5));
-
-        segmentTree = new SegmentTree(new int[]{15, 25, 9, 3, 12, 27, 21, 16}, (x, y) -> x & y, -1);
-        System.out.println(segmentTree.rangeResult(1, 5));
-        segmentTree.increment(3, 6);
-        System.out.println(segmentTree.rangeResult(1, 5));
-
-
-        segmentTree = new SegmentTree(new int[]{15, 25, 9, 3, 12, 27, 21, 16}, (x, y) -> x | y, 0);
-        System.out.println(segmentTree.rangeResult(1, 5));
-        segmentTree.increment(3, 6);
-        System.out.println(segmentTree.rangeResult(1, 5));
-
-        segmentTree = new SegmentTree(new int[]{15, 25, 9, 3, 12, 27, 21, 16}, (x, y) -> x ^ y, 0);
-        System.out.println(segmentTree.rangeResult(1, 5));
-        segmentTree.increment(3, 6);
-        System.out.println(segmentTree.rangeResult(1, 5));
-    }
     public SegmentTree(List<Integer> values, BiFunction<Integer, Integer, Integer> function, int defaultValue) {
-        this(values.stream().mapToInt(Integer::intValue).toArray(),function,defaultValue);
+        this(values.stream().mapToInt(Integer::intValue).toArray(), function, defaultValue);
     }
 
     public SegmentTree(int[] values, BiFunction<Integer, Integer, Integer> function, int defaultValue) {
@@ -72,11 +35,31 @@ public class SegmentTree {
             b = b / 2;
         }
         this.segmentTree = segmentTree;
-       // printTree( );
+         printTree( );
     }
 
-    public   void printTree( ) {
-        ArrayUtils.printArray(segmentTree);
+    public void printTree() {
+        StringBuilder sb = new StringBuilder();
+        int a = size;
+        int b = 2 * size - 1;
+        while ( a>=1 && a <= b) {
+            sb.append("[");
+            for (int i = a; i <= b; i += 2) {
+                sb.append(segmentTree[i]).append(",");
+                if(a!=b){
+
+                    sb.append(segmentTree[i + 1]).append(",");
+                }
+
+            }
+            sb.deleteCharAt(sb.length()-1);
+            sb.append("]");
+            a = a / 2;
+            b = b / 2;
+            sb.append(System.lineSeparator());
+        }
+
+        System.out.println(sb.toString());
     }
 
     public int rangeResult(int lower, int higher) {
@@ -99,12 +82,19 @@ public class SegmentTree {
             segmentTree[index] = function.apply(segmentTree[2 * index], segmentTree[2 * index + 1]);
         }
     }
+
     public void set(int index, int value) {
         index += size;
         segmentTree[index] = value;
         for (index /= 2; index >= 1; index /= 2) {
             segmentTree[index] = function.apply(segmentTree[2 * index], segmentTree[2 * index + 1]);
         }
+    }
+
+    public int get(int index) {
+        index += size;
+        return segmentTree[index];
+
     }
 
     public int getSize() {

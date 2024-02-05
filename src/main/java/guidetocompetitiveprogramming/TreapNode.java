@@ -4,6 +4,7 @@ public class TreapNode<T extends Comparable<T>> {
     T value;
     int priority;
     TreapNode<T> left, right;
+    int size;
 
     public TreapNode(T value) {
         this.value = value;
@@ -17,5 +18,11 @@ public class TreapNode<T extends Comparable<T>> {
     public TreapNode(T value, int priority) {
         this.value = value;
         this.priority = priority;
+    }
+    public void updateSize(){
+        size = 1 + (left==null?0: left.getSize())+(right==null?0:right.getSize());
+    }
+    public int getSize(){
+        return size;
     }
 }

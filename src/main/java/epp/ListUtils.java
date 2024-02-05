@@ -2,6 +2,7 @@ package epp;
 
 import epp.array.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
@@ -37,6 +38,18 @@ public class ListUtils {
         values.set(i,values.get(j));
         values.set(j,temp);
     }
+
+
+
+    public static List<Long> cumulativeSum(List<Integer> values ){
+        List<Long> sum = new ArrayList<>();
+        sum.add(Long.valueOf(values.get(0)));
+        for(int i=1;i<values.size();i++){
+            sum.add(sum.get(i-1)+values.get(i));
+        }
+        return sum;
+    }
+
     public static<T> void reverse(List<T> list){
         int start = 0;
         int end = list.size()-1;
