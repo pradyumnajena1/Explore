@@ -25,15 +25,15 @@ public class BoxOperations {
             int r = query.get(2);
             if(type==1){
                int delta = query.get(3);
-               segmentTree.updateRange(l,r,delta,true);
+               segmentTree.updateRange(l,r,delta );
 
             } else if (type==2) {
                 int delta = query.get(3);
-                segmentTree.updateRange(l,r,delta,false);
+                segmentTree.updateRange(l,r,delta );
 
             } else if (type==3) {
                 SegmentTreeNode segmentTreeNode = segmentTree.rangeResult(l, r);
-                result.add(segmentTreeNode.getMin());
+                result.add(segmentTreeNode .getSum());
             }else {
                 SegmentTreeNode segmentTreeNode = segmentTree.rangeResult(l, r);
                 result.add(segmentTreeNode.getSum());

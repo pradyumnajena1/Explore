@@ -419,6 +419,14 @@ public class ArrayUtils {
         }
         return cumsum;
     }
+    public static double[] cumulativeSum(double[] values) {
+        double[] cumsum = new double[values.length];
+        cumsum[0] = values[0];
+        for (int i = 1; i < values.length; i++) {
+            cumsum[i] = cumsum[i - 1] + values[i];
+        }
+        return cumsum;
+    }
     public static  void cumulativeSumInPlace(int[] values) {
         for (int i = 1; i < values.length; i++) {
             values[i] = values[i - 1] + values[i];

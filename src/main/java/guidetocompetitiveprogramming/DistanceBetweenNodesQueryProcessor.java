@@ -9,9 +9,16 @@ public class DistanceBetweenNodesQueryProcessor {
     private final LCAQueryProcessor lcaQueryProcessor;
 
     public DistanceBetweenNodesQueryProcessor(List<List<Integer>> adjList) {
-        this.lcaQueryProcessor = new LCAQueryProcessor(adjList, 1);
+        this (adjList, 1);
 
     }
+
+    public DistanceBetweenNodesQueryProcessor(List<List<Integer>> adjList,int root) {
+        this.lcaQueryProcessor = new LCAQueryProcessor(adjList, root);
+
+    }
+
+
 
 
 

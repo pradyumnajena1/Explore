@@ -1,5 +1,7 @@
 package epp.array.revision;
 
+import epp.array.ArrayUtils;
+
 public class NonUniformRandomNumberGenerator {
     private final double[] cumulative;
     private double[] probabilities;
@@ -16,10 +18,21 @@ public class NonUniformRandomNumberGenerator {
     }
     public int getNext(){
         double rand = Math.random();
-        int index = 0;
-        while (rand>cumulative[index]){
-            index++;
+        ArrayUtils.printArray(cumulative);
+        System.out.println(rand);
+        int low = 0;
+        int high = cumulative.length-1;
+        int index = -1;
+        while (low<=high){
+            int mid = (low+high)/2;
+            if(rand<= cumulative[mid] ){
+                index = mid;
+                high = mid-1;
+            }else{
+                low = mid+1;
+            }
         }
+
         return values[index];
     }
 

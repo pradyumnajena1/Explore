@@ -37,4 +37,18 @@ public class IntegerUtils {
 
         return result;
     }
+
+    public static int modAdd(int a,int b,int mod){
+       return (a%mod + b%mod)%mod;
+    }
+    public static int modSub(int a,int b,int mod){
+        int res = (a % mod - b % mod) % mod;
+        if(res<0){
+            res = mod+res;
+        }
+        return res;
+    }
+    public static int modMul(int a,int b,int mod){
+        return (a%mod * b%mod)%mod;
+    }
 }

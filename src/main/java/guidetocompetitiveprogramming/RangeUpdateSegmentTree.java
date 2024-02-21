@@ -43,4 +43,8 @@ public class RangeUpdateSegmentTree {
         }
         return segmentTree.rangeResult(0, index);
     }
+
+    public void printTree() {
+        segmentTree.printTree();
+    }
 }

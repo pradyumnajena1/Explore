@@ -27,7 +27,7 @@ public class KittyCalculationsOnATree {
                 adjList.get(edge.get(0)).add(edge.get(1));
                 adjList.get(edge.get(1)).add(edge.get(0));
             }
-            CentroidDecomposition centroidDecomposition = new CentroidDecomposition(adjList.size()+1, adjList);
+             CentroidDecomposition centroidDecomposition = new CentroidDecomposition(adjList.size()+1, adjList);
             LCAQueryProcessor queryProcessor = new LCAQueryProcessor(centroidDecomposition.getCentroidTree(), centroidDecomposition.getRootCentroid());
             DistanceBetweenNodesQueryProcessor distanceBetweenNodesQueryProcessor = new DistanceBetweenNodesQueryProcessor(adjList );
 

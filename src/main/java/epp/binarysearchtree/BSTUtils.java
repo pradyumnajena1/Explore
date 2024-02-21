@@ -225,7 +225,7 @@ public class BSTUtils {
             root.right = insertNode(root.right, data);
         } else {
             root.left = insertNode(root.left, data);
-        }
+    }
 
         return root;
     }
