@@ -2,6 +2,7 @@ package com.uber.test;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class ExpiringContainerImpl implements ExpiringContainer{
 
@@ -21,8 +22,8 @@ public class ExpiringContainerImpl implements ExpiringContainer{
     }
 
     @Override
-    public void put(String value, LocalDateTime expiredOn) {
-        ItemNode itemNode = new ItemNode(value, expiredOn);
+    public void put(String value, TimeUnit unit,int num  ) {
+        ItemNode itemNode = new ItemNode(value, LocalDateTime.now().plusSeconds(unit.toSeconds(num)));
         doAddItem(itemNode);
     }
 
