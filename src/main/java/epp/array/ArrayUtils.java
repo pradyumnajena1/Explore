@@ -51,7 +51,7 @@ public class ArrayUtils {
     public static int[] randomArray(int size, int minValue, int maxValue) {
         int[] array = new int[size];
         for (int i = 0; i < size; i++) {
-            array[i] = minValue + (int) (Math.random() * (maxValue - minValue));
+            array[i] = minValue + (int) (Math.random() * (maxValue - minValue+1));
         }
         return array;
     }
