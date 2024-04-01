@@ -16,9 +16,8 @@ public class JimAndTheOrders {
     public static void main(String[] args) throws IOException {
 
 
-        String inputPath = System.getenv("INPUT_PATH");
-        System.out.println(inputPath);
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(inputPath));
+
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(System.getenv("INPUT_PATH")));
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
         int n = Integer.parseInt(bufferedReader.readLine().trim());
@@ -68,7 +67,7 @@ public class JimAndTheOrders {
         }
         triplets.sort(Comparator
                 .comparingLong( (Triplet<Integer,Integer,Integer> x)-> ((long)  x.getSecond())+x.getThird())
-                .thenComparingInt((Triplet<Integer,Integer,Integer> x)->x.getSecond()));
+                .thenComparingInt((Triplet<Integer,Integer,Integer> x)->x.getFirst()));
         List<Integer> customerIds = triplets.stream().map(x -> x.getFirst()).collect(toList());
         return customerIds;
     }

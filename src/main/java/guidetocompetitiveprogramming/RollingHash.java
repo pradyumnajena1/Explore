@@ -5,7 +5,7 @@ import epp.array.ArrayUtils;
 public class RollingHash {
 
     private static final int FACTOR = 3;
-    private static final int MOD = (int) (Math.pow(10, 9) + 7);
+    private static final int MOD = (int) (Math.pow(10, 8) + 7);
     private final int[] powers;
     private final int[] hashes;
 
@@ -32,7 +32,7 @@ public class RollingHash {
         return hash;
     }
 
-    int getHash(int start, int end) {
+   public int getHash(int start, int end) {
         ArrayUtils.rangeCheck(hashes.length,start,end);
         return (hashes[end] - (start-1>=0? (hashes[start-1]*powers[end-start+1])%MOD :0)) %MOD;
     }
