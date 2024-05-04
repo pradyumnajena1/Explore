@@ -63,4 +63,45 @@ public class ListUtils {
 
     }
 
+    public static int getFirstIndex(List<Integer> list,int value){
+        return getFirstIndex(list,0,list.size()-1,value);
+    }
+
+    public static int getLastIndex(List<Integer> list,int value){
+        return getLastIndex(list,0,list.size()-1,value);
+    }
+
+    public static int getFirstIndex(List<Integer> list, int start, int end, int value) {
+        int index = -1;
+        while (start<=end){
+            int mid = (start+end)/2;
+            if(list.get(mid)==value){
+                index = mid;
+                end=mid-1;
+            }else if(list.get(mid)>value){
+                end=mid-1;
+            }else{
+                start=mid+1;
+            }
+        }
+        return index;
+    }
+
+    public static int getLastIndex(List<Integer> list, int start, int end, int value) {
+        int index = -1;
+        while (start<=end){
+            int mid = (start+end)/2;
+            if(list.get(mid)==value){
+                index = mid;
+                start=mid+1;
+            }else if(list.get(mid)>value){
+                end=mid-1;
+            }else{
+                start=mid+1;
+            }
+        }
+        return index;
+    }
+
+
 }

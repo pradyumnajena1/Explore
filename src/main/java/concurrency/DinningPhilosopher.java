@@ -41,6 +41,7 @@ public class DinningPhilosopher {
             this.id = id;
         }
 
+
         public void eat() throws InterruptedException {
             ChopStick first = left.id < right.id ? left : right;
             ChopStick second = left.id < right.id ? right : left;

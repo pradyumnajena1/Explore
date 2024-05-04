@@ -233,6 +233,12 @@ public class ArrayUtils {
         System.out.println();
 
     }
+    public static void print2DArray(double[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.println(Arrays.toString(array[i]));
+        }
+        System.out.println();
+    }
     public static void print2DArray(boolean[][] array) {
         for (int i = 0; i < array.length; i++) {
             System.out.println(Arrays.toString(array[i]));
@@ -444,6 +450,13 @@ public class ArrayUtils {
     }
 
     public static void shuffle(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            int selectedIndex = (int) (Math.random() * (array.length - i));
+            swap(array, selectedIndex, array.length - 1 - i);
+        }
+    }
+
+    public static void shuffle(char[] array) {
         for (int i = 0; i < array.length; i++) {
             int selectedIndex = (int) (Math.random() * (array.length - i));
             swap(array, selectedIndex, array.length - 1 - i);
@@ -677,4 +690,6 @@ public class ArrayUtils {
 
         return pascalTriangle;
     }
+
+
 }

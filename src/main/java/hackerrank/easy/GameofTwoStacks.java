@@ -1,6 +1,6 @@
 package hackerrank.easy;
 
-import epp.Pair;
+import epp.Triplet;
 
 import java.io.*;
 import java.util.HashMap;
@@ -56,51 +56,44 @@ public class GameofTwoStacks {
 
     public static int twoStacks(int maxSum, List<Integer> a, List<Integer> b) {
         // Write your code here
-        Map<Pair<Integer, Integer>, Integer> cache = new HashMap<>();
-        return twoStacks(maxSum, a, b, 0, 0, 0, cache);
+        Map<Triplet<Integer, Integer, Integer>, Integer> cache = new HashMap<>();
+        return twoStacks(maxSum, a, b, 0, 0, cache);
     }
 
-    private static int twoStacks(int maxSum, List<Integer> a, List<Integer> b, int runningSum, int atop, int btop, Map<Pair<Integer, Integer>, Integer> cache) {
-        if (a.size() == atop && b.size() == btop) {
+    private static int twoStacks(int maxSum, List<Integer> a, List<Integer> b, int i, int j, Map<Triplet<Integer, Integer, Integer>, Integer> cache) {
+        if (i == a.size() && j == b.size()) {
             return 0;
         }
-        if (runningSum > maxSum) {
+        if (maxSum < 0) {
             return 0;
         }
-        Pair<Integer, Integer> key = new Pair<>(atop, btop);
+        Triplet<Integer, Integer, Integer> key = new Triplet<>(maxSum, i, j);
         if (cache.containsKey(key)) {
             return cache.get(key);
         }
-        int numGames = 0;
-        while ((atop < a.size() && a.get(atop) == 0)) {
-            atop++;
-            numGames++;
+        int maxResult = 0;
+        int count=0;
+        while (i < a.size() && a.get(i)==0){
+            i++;
+            count++;
         }
-        while ((btop < b.size() && b.get(btop) == 0)) {
-            btop++;
-            numGames++;
-        }
-        while ((atop < a.size() && a.get(atop) == 1 && btop < b.size() && b.get(btop) == 1 && maxSum- runningSum   >= 2)) {
-            atop++;
-            btop++;
-            numGames+=2;
-            runningSum+=2;
+        while (j < b.size() && b.get(j)==0){
+            j++;
+            count++;
         }
 
-
-
-        int maxGames = 0;
-        if (atop < a.size() && maxSum- runningSum   >= a.get(atop) ) {
-
-            numGames = numGames + twoStacks(maxSum, a, b, runningSum + a.get(atop), atop + 1, btop, cache);
-            maxGames = Math.max(numGames, maxGames);
+        if (i < a.size() && maxSum >= a.get(i)) {
+            int aSelect = twoStacks(maxSum - a.get(i), a, b, i + 1, j, cache);
+            maxResult = Math.max(maxResult,  aSelect+1);
         }
-        if (btop < b.size() && maxSum- runningSum   >= b.get(btop)) {
-
-            numGames = numGames + twoStacks(maxSum, a, b, runningSum + b.get(btop), atop, btop + 1, cache);
-            maxGames = Math.max(numGames, maxGames);
+        if (j < b.size() && maxSum >= b.get(j)) {
+            int bSelect = twoStacks(maxSum - b.get(j), a, b, i, j + 1, cache);
+            maxResult = Math.max(maxResult, bSelect+1);
         }
-        cache.put(key, maxGames);
-        return maxGames;
+           maxResult+=count;
+        cache.put(key, maxResult );
+        return maxResult;
     }
+
+
 }
