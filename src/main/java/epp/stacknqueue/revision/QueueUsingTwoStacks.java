@@ -1,14 +1,16 @@
 package epp.stacknqueue.revision;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class QueueUsingTwoStacks<T> {
-    private Stack<T> stackA;
-    private Stack<T> stackB;
+    private Deque<T> stackA;
+    private Deque<T> stackB;
    private  int size;
     public QueueUsingTwoStacks() {
-        stackA = new Stack<>();
-        stackB = new Stack<>();
+    stackA = new LinkedList<>();
+    stackB = new LinkedList<>();
     }
 
     public void enqueue(T value){
@@ -16,18 +18,19 @@ public class QueueUsingTwoStacks<T> {
          size++;
     }
     public T dequeue(){
-        if(size==0){
-            throw new IllegalStateException("Empty queue");
-        }
-        if(stackB.isEmpty()){
-            while (!stackA.isEmpty()){
-                stackB.push(stackA.pop());
-            }
 
+        if(size>0){
+            if(stackB.isEmpty()){
+                while (!stackA.isEmpty()){
+                    stackB.push(stackA.pop());
+                }
+
+            }
+            T pop = stackB.pop();
+            size--;
+            return pop;
         }
-        T pop = stackB.pop();
-        size--;
-        return pop;
+        throw new IllegalStateException("Empty queue");
     }
 
     public static void main(String[] args) {

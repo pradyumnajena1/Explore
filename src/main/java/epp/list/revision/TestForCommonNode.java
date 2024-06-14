@@ -13,7 +13,8 @@ public class TestForCommonNode {
         System.out.println(commonNode );
     }
 
-    private static LinkedListNode<Integer> findFirstCommonNode(LinkedListNode<Integer> list1, LinkedListNode<Integer> list2) {
+    public static LinkedListNode<Integer> findFirstCommonNode(LinkedListNode<Integer> list1,
+                                                          LinkedListNode<Integer> list2) {
         int list1Length =  LinkedListNode.getLength(list1);
         int list2Length =  LinkedListNode.getLength(list2);
 

@@ -11,23 +11,14 @@ public class RemoveDuplicatesFromSortedList {
     }
 
     private static void removeDuplicatesFromSortedList(LinkedListNode<Integer> list) {
-        if(list==null || list.next==null){
-            return;
-        }
-        LinkedListNode<Integer> prev = list;
-        LinkedListNode<Integer> current = list.next;
-        LinkedListNode<Integer> next = null;
-        while (current!=null){
-            next = current.next;
-            if(current.data==prev.data){
-                //delete current node
-                prev.next = current.next;
-                current.next = null;
-
-            }else{
-                prev = current;
+        LinkedListNode<Integer> iter = list;
+        while (iter!=null){
+            LinkedListNode<Integer> nextDistinct = iter.next;
+            while (nextDistinct!=null && nextDistinct.data == iter.data){
+                nextDistinct = nextDistinct.next;
             }
-            current=next;
+            iter.next = nextDistinct;
+            iter = nextDistinct;
         }
 
     }

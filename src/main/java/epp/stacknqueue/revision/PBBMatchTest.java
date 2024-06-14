@@ -1,5 +1,7 @@
 package epp.stacknqueue.revision;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 import java.util.Stack;
 
@@ -11,13 +13,16 @@ public class PBBMatchTest {
     }
 
     private static boolean isPBBMatched(String expression) {
-        Stack<Character> stack = new Stack<>();
+    Deque<Character> stack = new ArrayDeque<>();
         Map<Character,Character> mapping = Map.of('(',')','[',']','{','}');
         char[] charArray = expression.toCharArray();
         for(char c:charArray){
             if(mapping.keySet().contains(c)){
                 stack.push(c);
             }else{
+                if(stack.isEmpty()){
+                    return false;
+                }
                 Character pop = stack.pop();
                 if(mapping.get(pop) !=c){
                     return false;

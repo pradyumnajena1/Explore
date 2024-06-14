@@ -5,37 +5,37 @@ import java.util.Deque;
 import java.util.Queue;
 
 public class QueueWithMax <T extends Comparable<T>>{
-    private Queue<T> queue;
-    private Deque<T> maxQueue;
+    private Queue<T> entriesQueue;
+    private Deque<T> candidatesForMax;
 
     public QueueWithMax() {
-        queue = new ArrayDeque<>();
-        maxQueue = new ArrayDeque<>();
+        entriesQueue = new ArrayDeque<>();
+        candidatesForMax = new ArrayDeque<>();
     }
 
     public void enqueue(T value){
-        queue.offer(value);
-        while (!maxQueue.isEmpty()&& maxQueue.peekLast().compareTo(value)<0){
-            maxQueue.pollLast();
+        entriesQueue.offer(value);
+        while (!candidatesForMax.isEmpty()&& candidatesForMax.peekLast().compareTo(value)<0){
+            candidatesForMax.pollLast();
         }
-        maxQueue.offerLast(value);
+        candidatesForMax.offerLast(value);
 
     }
     public T dequeue(){
-        if(queue.isEmpty()){
+        if(entriesQueue.isEmpty()){
             throw new IllegalStateException("Queue is empty");
         }
-        T polled = queue.poll();
-        if(polled.compareTo(maxQueue.peekFirst())==0){
-            maxQueue.pollFirst();
+        T polled = entriesQueue.poll();
+        if(polled.compareTo(candidatesForMax.peek())==0){
+            candidatesForMax.poll();
         }
         return polled;
     }
     public T max(){
-        if(queue.isEmpty()){
+        if(entriesQueue.isEmpty()){
             throw new IllegalStateException("Queue is empty");
         }
-        return maxQueue.peekFirst();
+        return candidatesForMax.peek();
     }
 
     public static void main(String[] args) {

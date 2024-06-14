@@ -43,7 +43,7 @@ public class MapUtils {
     }
 
 
-    public static Map<Character, Integer> getCharFrequency(String value) {
+    public static Map<Character, Long> getCharFrequency(String value) {
 
         if(value==null||value.isEmpty()){
             return new HashMap<>();
@@ -51,12 +51,11 @@ public class MapUtils {
         List<Character> list = value.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
         return getFrequencies(list);
     }
-    public static <T> Map<T,Integer> getFrequencies(List<T> values){
-        Map<T,Integer> frequencyMap = new HashMap<>();
-        for(T value:values){
-            frequencyMap.put(value,frequencyMap.getOrDefault(value,0)+1);
-        }
-        return frequencyMap;
+    public static <T> Map<T,Long> getFrequencies(List<T> values){
+
+        Map<T, Long> collect = values.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        return collect;
     }
 
     public static <T,V> Map<V,Integer> getFrequencies(List<T> values, Function<? super T,? extends V> keySelector){

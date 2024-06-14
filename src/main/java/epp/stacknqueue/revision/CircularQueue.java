@@ -3,13 +3,15 @@ package epp.stacknqueue.revision;
 import epp.array.ArrayUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * implement circular queue using array
  */
 public class CircularQueue<T> {
-     private Object[] values;
+    public static final int SCALE_FACTOR = 2;
+    private Object[] values;
      private int head = 0;
      private int tail = 0;
      private int size = 0;
@@ -18,26 +20,25 @@ public class CircularQueue<T> {
      }
      public void enqueue(T value){
          if(size==values.length){
-             Object[] newValues = new Object[values.length*2];
-             ArrayUtils.rotateArrayRight(values, values.length-head);
-             System.arraycopy(values,0,newValues,0,values.length);
-             values = newValues;
+             Collections.rotate(Arrays.asList(values), -head );
              head=0;
              tail=size;
+             values = Arrays.copyOf(values,size* SCALE_FACTOR);
          }
          values[tail] = value;
          tail = (tail+1)% values.length;
          size++;
      }
      public T deque(){
-         if(size==0){
-             throw new IllegalStateException("Empty stack");
+
+         if(size>0){
+             T value = (T) values[head];
+             values[head] = null;
+             head = (head+1)% values.length;
+             size--;
+             return value;
          }
-         T value = (T) values[head];
-         values[head] = null;
-         head = (head+1)% values.length;
-         size--;
-         return value;
+         throw new IllegalStateException("Empty stack");
      }
 
     @Override
@@ -56,7 +57,7 @@ public class CircularQueue<T> {
     public static void main(String[] args) {
         CircularQueue<Integer> circularQueue = new CircularQueue<>(5);
         circularQueue.enqueue(1);
-        circularQueue.enqueue(2);
+        circularQueue.enqueue(SCALE_FACTOR);
         circularQueue.enqueue(3);
         circularQueue.enqueue(4);
         circularQueue.enqueue(5);

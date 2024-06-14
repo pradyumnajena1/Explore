@@ -4,6 +4,8 @@ import epp.hashmap.MapUtils;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * test if word can be rearranged to form a palindrome
@@ -34,13 +36,12 @@ public class TestPalindrome {
      */
 
     private static boolean isPalindrome(String s) {
-        Map<Character, Integer> frequencyMap = MapUtils.getCharFrequency(s);
-        int oddCount=0;
-        for( int frequency: frequencyMap.values()){
-            if(frequency%2==1){
-                oddCount++;
-            }
-        }
+        Map<Character, Long> frequencyMap =
+                s.chars().mapToObj(x -> Character.valueOf((char) x)).collect(Collectors.groupingBy(Function.identity(),
+                Collectors.counting()));
+
+        Long oddCount = frequencyMap.entrySet().stream().filter(x -> x.getValue() % 2 == 1).collect(Collectors.counting());
+
         return oddCount<=1;
     }
 

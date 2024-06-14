@@ -15,9 +15,9 @@ public class ReverseLInkedList {
     public static LinkedListNode<Integer> reverseList(LinkedListNode<Integer> linkedListNode) {
        LinkedListNode<Integer> prev = null;
        LinkedListNode<Integer> current = linkedListNode;
-       LinkedListNode<Integer> next = null;
+
        while (current!=null){
-           next = current.next;
+           LinkedListNode<Integer> next = current.next;
            current.next = prev;
            prev = current;
            current = next;

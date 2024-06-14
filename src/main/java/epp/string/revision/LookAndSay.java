@@ -1,31 +1,30 @@
 package epp.string.revision;
 
 public class LookAndSay {
-    public static void main(String[] args) {
-        String s = lookAndSay(8);
-        System.out.println(s);
-    }
+  public static void main(String[] args) {
+    String s = lookAndSay(8);
+    System.out.println(s);
+  }
 
-    private static String lookAndSay(int n) {
-        if(n==1){
-            return "1";
-        }
-        String previous = lookAndSay(n-1);
-        String next ="";
-        char prevDigit = previous.charAt(0);
-        int count =1;
-        for(int i=1;i<previous.length();i++){
-            char currentDigit = previous.charAt(i);
-            if(prevDigit== currentDigit){
-                count++;
-            }else {
-                next=next+count+prevDigit;
-
-                prevDigit= currentDigit;
-                count=1;
-            }
-        }
-        next=next+count+prevDigit;
-        return next;
+  private static String lookAndSay(int n) {
+    String s = "1";
+    for (int i = 1; i < n; i++) {
+      s = nextNUmber(s);
     }
+    return s;
+  }
+
+  private static String nextNUmber(String s) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < s.length(); i++) {
+      int count = 1;
+      while (i + 1 < s.length() && s.charAt(i) == s.charAt(i + 1)) {
+        i++;
+        count++;
+      }
+      sb.append(count);
+      sb.append(s.charAt(i));
+    }
+    return sb.toString();
+  }
 }

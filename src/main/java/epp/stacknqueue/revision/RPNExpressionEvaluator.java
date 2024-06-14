@@ -1,93 +1,109 @@
 package epp.stacknqueue.revision;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class RPNExpressionEvaluator {
 
-    public static void main(String[] args) {
-        System.out.println(new RPNExpressionEvaluator().evaluate("3,4,*,1,2,+,+"));
-        System.out.println(new RPNExpressionEvaluator().evaluate("1,1,+,-2,*"));
-        System.out.println(new RPNExpressionEvaluator().evaluate("4,6,/,2,/"));
-    }
-    private Stack<String> expressions;
-
+    private Deque<Integer> intermediateResult;
     public RPNExpressionEvaluator() {
         init();
     }
 
-    private void init() {
-        expressions = new Stack<>();
+    public static void main(String[] args) {
+        System.out.println(new RPNExpressionEvaluator().evaluateRPN("3,4,*,1,2,+,+"));
+        System.out.println(new RPNExpressionEvaluator().evaluateRPN("1,1,+,-2,*"));
+        System.out.println(new RPNExpressionEvaluator().evaluateRPN("4,6,/,2,/"));
+        System.out.println(new RPNExpressionEvaluator().evaluatePN("+,4,6"));
     }
 
-    public   int evaluate(String rpnExpression){
-        init();
+    private void init() {
+    intermediateResult = new ArrayDeque<>();
+    }
+
+    public   int evaluateRPN(String rpnExpression){
         String[] tokens = rpnExpression.split(",");
-        for(String token:tokens){
+        return evaluateRPN(tokens);
+    }
+
+    public   int evaluatePN(String pnExpression){
+        String[] tokens = pnExpression.split(",");
+        List<String> list = Arrays.asList(tokens);
+        Collections.reverse(list);
+        String[] pnTokens = list.toArray(new String[0]);
+        return evaluateRPN(pnTokens);
+    }
+
+    private Integer evaluateRPN(String[] tokens) {
+        init();
+        for(String token: tokens){
             token = token.trim();
-            Operators operator = Operators.getOperator(token);
+            Operator operator = Operator.getOperator(token);
             if(operator==null){
-                expressions.push(token);
+                Integer operand = Integer.parseInt(token);
+                intermediateResult.push(operand);
             }else{
-             Integer value=   operator.evaluate(expressions);
-             expressions.push(value.toString());
+             Integer value=   operator.evaluate(intermediateResult);
+             intermediateResult.push(value);
             }
         }
-        if(expressions.isEmpty()||expressions.size()>1){
+        if(intermediateResult.size()!=1){
             throw new IllegalArgumentException("Invalid expression");
         }
-        return Integer.parseInt(expressions.peek());
+        return intermediateResult.peek();
     }
 
-    public enum Operators{
+    public enum Operator {
         PLUS("+"){
             @Override
-            public Integer evaluate(Stack<String> expressions) {
-                String right = expressions.pop();
-                String left = expressions.pop();
-                return Integer.parseInt(left)+Integer.parseInt(right);
+            public Integer evaluate(Deque<Integer> expressions) {
+                int right = expressions.pop();
+                int left = expressions.pop();
+                return  left + right;
             }
         },MINUS("-"){
             @Override
-            public Integer evaluate(Stack<String> expressions) {
-                String right = expressions.pop();
-                String left = expressions.pop();
-                return Integer.parseInt(left)-Integer.parseInt(right);
+            public Integer evaluate(Deque<Integer> expressions) {
+                int right = expressions.pop();
+                int left = expressions.pop();
+                return  left - right;
             }
         },MULTIPLY("*"){
             @Override
-            public Integer evaluate(Stack<String> expressions) {
-                String right = expressions.pop();
-                String left = expressions.pop();
-                return Integer.parseInt(left)*Integer.parseInt(right);
+            public Integer evaluate(Deque<Integer> expressions) {
+                int right = expressions.pop();
+                int left = expressions.pop();
+                return  left * right;
             }
         },DIVISION("/"){
             @Override
-            public Integer evaluate(Stack<String> expressions) {
-                String right = expressions.pop();
-                String left = expressions.pop();
-                return Integer.parseInt(left)/Integer.parseInt(right);
+            public Integer evaluate(Deque<Integer> expressions) {
+                int right = expressions.pop();
+                int left = expressions.pop();
+                return left/right;
             }
         };
 
-        private final String symbol;
-        private static Map<String,Operators> valuesMap = new HashMap<>();
+        private static Map<String, Operator> valuesMap = new HashMap<>();
 
-        Operators(String symbol) {
-            this.symbol = symbol;
-
-        }
         static {
-            for(Operators op:values()){
+            for(Operator op:values()){
                 valuesMap.put(op.symbol,op);
             }
         }
-        public static Operators getOperator(String symbol){
-            return valuesMap.get(symbol);
+
+        private final String symbol;
+        Operator(String symbol) {
+            this.symbol = symbol;
+
         }
 
-        public Integer evaluate(Stack<String> expressions) {
+        public static Operator getOperator(String symbol){
+            Operator operator = valuesMap.get(symbol);
+            return  operator;
+
+        }
+
+        public Integer evaluate(Deque<Integer> expressions) {
             return null;
         }
     }

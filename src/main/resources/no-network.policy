@@ -1,0 +1,18 @@
+// no-network.policy
+grant {
+    // Other permissions can be added here as needed
+    permission java.io.FilePermission "<<ALL FILES>>", "read,write,execute,delete";
+    // Grant runtime permissions for thread management and other critical operations
+    permission java.lang.RuntimePermission "modifyThread";
+    permission java.lang.RuntimePermission "modifyThreadGroup";
+    permission java.lang.RuntimePermission "getProtectionDomain";
+    permission java.lang.RuntimePermission "getClassLoader";
+    permission java.lang.RuntimePermission "getStackTrace";
+    permission java.lang.RuntimePermission "createClassLoader";
+    permission java.lang.RuntimePermission "accessDeclaredMembers";
+    permission java.lang.RuntimePermission "accessClassInPackage.sun.reflect";
+
+
+    // Deny all network access
+   // permission java.net.SocketPermission "*", "connect,accept,resolve";
+};

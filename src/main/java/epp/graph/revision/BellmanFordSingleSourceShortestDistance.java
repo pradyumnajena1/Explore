@@ -43,8 +43,8 @@ public class BellmanFordSingleSourceShortestDistance {
             distance.put(node.getData(), Integer.MAX_VALUE);
         }
         distance.put(sourceNode.getData(), 0);
+        Collection<GraphEdge<Integer>> allEdges = graph.getAllEdges();
         for (int times = 1; times < allNodes.size(); times++) {
-            Collection<GraphEdge<Integer>> allEdges = graph.getAllEdges();
             for (GraphEdge<Integer> edge : allEdges) {
                 int dist = (int) edge.getProperties().get(DISTANCE);
                 GraphNode<Integer> source = edge.getSource();
@@ -58,7 +58,7 @@ public class BellmanFordSingleSourceShortestDistance {
         }
         boolean updated = false;
 
-        Collection<GraphEdge<Integer>> allEdges = graph.getAllEdges();
+
         for (GraphEdge<Integer> edge : allEdges) {
             int dist = (int) edge.getProperties().get(DISTANCE);
             GraphNode<Integer> source = edge.getSource();

@@ -22,20 +22,25 @@ public class TestPalindrome {
     }
 
     private static boolean isPalindrome(LinkedListNode<Integer> list) {
-        LinkedListNode<Integer>[] listNodes = LinkedListNode.splitInHalf(list);
-        LinkedListNode<Integer> first = listNodes[0];
-        LinkedListNode<Integer> second = listNodes[1];
-        System.out.println(first);
-        System.out.println(second);
-        second= ReverseLInkedList.reverseList(second);
-        System.out.println(second);
-        while (first!=null&&second!=null){
-            if(first.data!=second.data){
+        if(list==null || list.next==null){
+            return true;
+        }
+        LinkedListNode<Integer> fast = list;
+        LinkedListNode<Integer> slow = list;
+        while (fast!=null&&fast.next!=null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        LinkedListNode<Integer> firstHalfIter = list;
+        LinkedListNode<Integer> secondHalfIter = ReverseLInkedList.reverseList(slow);
+        while (firstHalfIter!=null && secondHalfIter!=null){
+            if(firstHalfIter.data!=secondHalfIter.data){
                 return false;
             }
-            first=first.next;
-            second=second.next;
+            firstHalfIter = firstHalfIter.next;
+            secondHalfIter = secondHalfIter.next;
         }
+
         return true;
     }
 }

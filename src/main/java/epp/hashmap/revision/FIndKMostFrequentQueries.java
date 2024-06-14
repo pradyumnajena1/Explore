@@ -15,7 +15,7 @@ public class FIndKMostFrequentQueries {
     }
 
     private static List<String> findMostFrequentItems(List<String> queries, int k) {
-        Map<String, Integer> frequencies = MapUtils.getFrequencies(queries);
+        Map<String, Long> frequencies = MapUtils.getFrequencies(queries);
         Comparator<Map.Entry<String, Integer>> entryComparator = (Map.Entry<String, Integer> a, Map.Entry<String, Integer> b) -> Integer.compare(b.getValue(), a.getValue());
         List<Map.Entry<String, Integer>> entries = new ArrayList(frequencies.entrySet());
         FindTheKthElement.findKthItem(entries, k, entryComparator);

@@ -1,16 +1,18 @@
 package epp.stacknqueue.revision;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class MaxStack2<T extends Comparable<T>> {
-    private Stack<T> values;
-    private Stack<T> maxValues;
+    private Deque<T> values;
+    private Deque<T> maxValues;
     public MaxStack2(){
-        values = new Stack<>();
-        maxValues = new Stack<>();
+    values = new LinkedList<>();
+    maxValues = new LinkedList<>();
     }
     public void push(T data){
-        if(values.isEmpty()){
+        if(isEmpty()){
             values.push(data);
             maxValues.push(data);
         }else{
@@ -25,16 +27,21 @@ public class MaxStack2<T extends Comparable<T>> {
     }
 
     public T pop(){
-        if(values.isEmpty()){
+        if(isEmpty()){
             throw new IllegalStateException("empty stack");
         }else{
             T pop = values.pop();
-            if(pop.compareTo(maxValues.peek())>=0){
+            if(pop.compareTo(maxValues.peek())==0){
                 maxValues.pop();
             }
             return pop;
         }
     }
+
+    public boolean isEmpty() {
+        return values.isEmpty();
+    }
+
     public T max(){
       return   maxValues.peek();
     }

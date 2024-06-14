@@ -22,11 +22,11 @@ public class CheckAnonymousLetter {
             return false;
         }
 
-        Map<Character, Integer> charFrequency_letter = MapUtils.getCharFrequency(letter);
-        Map<Character, Integer> charFrequency_magazine = MapUtils.getCharFrequency(magazine);
+        Map<Character, Long> charFrequency_letter = MapUtils.getCharFrequency(letter);
+        Map<Character, Long> charFrequency_magazine = MapUtils.getCharFrequency(magazine);
 
-        for (Map.Entry<Character, Integer> entry : charFrequency_letter.entrySet()) {
-            if (entry.getValue() > charFrequency_magazine.getOrDefault(entry.getKey(), 0)) {
+        for (Map.Entry<Character, Long> entry : charFrequency_letter.entrySet()) {
+            if (entry.getValue() > charFrequency_magazine.getOrDefault(entry.getKey(), 0L)) {
                 return false;
             }
 

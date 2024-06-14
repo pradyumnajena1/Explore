@@ -15,9 +15,9 @@ public class PartitionIntoAnagramGroups {
     }
 
     public static Set<Set<String>> partitionIntoAnagramGroups(String[] values) {
-        Map<Map<Character,Integer>,Set<String>> groups = new HashMap<>();
+        Map<Map<Character,Long>,Set<String>> groups = new HashMap<>();
         for(String value:values){
-            Map<Character,Integer> charFrequency = MapUtils.getCharFrequency(value);
+            Map<Character,Long> charFrequency = MapUtils.getCharFrequency(value);
             Set<String> set = groups.getOrDefault(charFrequency, new HashSet<>());
             set.add(value);
             groups.put(charFrequency,set);
