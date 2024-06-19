@@ -1,6 +1,7 @@
 package epp.heap.revision;
 
 import java.math.BigInteger;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class QueueUsingHeap<T> {
@@ -16,16 +17,16 @@ public class QueueUsingHeap<T> {
         queueUsingHeap.poll();
         System.out.println(queueUsingHeap.peek());
     }
-    private PriorityQueue<Record<T>> priorityQueue;
+    private PriorityQueue<ValueWithRank<T>> priorityQueue;
     private BigInteger recordNumber = BigInteger.ZERO;
 
     public QueueUsingHeap() {
-        this.priorityQueue = new PriorityQueue<>();
+        this.priorityQueue = new PriorityQueue<>( );
     }
 
     public void offer(T value){
         recordNumber = recordNumber.add(BigInteger.ONE);
-        priorityQueue.offer(new Record<>(value,recordNumber));
+        priorityQueue.offer(new ValueWithRank<>(value,recordNumber));
     }
     public T peek(){
         if(priorityQueue.isEmpty()){
@@ -40,11 +41,11 @@ public class QueueUsingHeap<T> {
         return priorityQueue.poll().value;
     }
 
-    public static class Record<T> implements Comparable<Record>{
+    public static class ValueWithRank<T> implements Comparable<ValueWithRank>{
         private T value;
         private BigInteger recordNumber;
 
-        public Record(T value, BigInteger recordNumber) {
+        public ValueWithRank(T value, BigInteger recordNumber) {
             this.value = value;
             this.recordNumber = recordNumber;
         }
@@ -54,7 +55,7 @@ public class QueueUsingHeap<T> {
         }
 
         @Override
-        public int compareTo(Record o) {
+        public int compareTo(ValueWithRank o) {
             return recordNumber.compareTo(o.recordNumber);
         }
     }

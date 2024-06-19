@@ -24,23 +24,21 @@ public class TestSymmetric {
     }
 
     private static boolean isSymmetric(BinaryTreeNode<Integer> root) {
-        if(root==null){
-            return true;
-        }
 
-        return isMirrorImage(root.left,root.right);
+
+        return  root==null|| checkSymmetric(root.left,root.right);
     }
 
-    private static boolean isMirrorImage(BinaryTreeNode<Integer> left, BinaryTreeNode<Integer> right) {
+    private static boolean checkSymmetric(BinaryTreeNode<Integer> left, BinaryTreeNode<Integer> right) {
         if(left==null&&right==null){
             return true;
         }
         if(left==null||right==null){
             return false;
         }
-        if(left.data!=right.data){
-            return false;
-        }
-        return isMirrorImage(left.left,right.right) && isMirrorImage(left.right,right.left);
+
+        return  left.data==right.data &&
+                checkSymmetric(left.left,right.right) &&
+                checkSymmetric(left.right,right.left);
     }
 }

@@ -17,7 +17,7 @@ public class StackUsingHeap<T> {
         stackUsingHeap.pop();
         System.out.println(stackUsingHeap.peek());
     }
-    private PriorityQueue<QueueUsingHeap.Record<T>> maxHeap;
+    private PriorityQueue<QueueUsingHeap.ValueWithRank<T>> maxHeap;
     private BigInteger recordNumber = BigInteger.ZERO;
 
     public StackUsingHeap() {
@@ -26,7 +26,7 @@ public class StackUsingHeap<T> {
 
     public void push(T value){
         recordNumber = recordNumber.add(BigInteger.ONE);
-        maxHeap.offer(new QueueUsingHeap.Record<>(value,recordNumber));
+        maxHeap.offer(new QueueUsingHeap.ValueWithRank<>(value,recordNumber));
     }
     public T pop(){
         if(maxHeap.isEmpty()){

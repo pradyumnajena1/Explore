@@ -10,20 +10,9 @@ public class NextSiblingFromPerfectBinaryTree {
         );
         System.out.println(root);
 
-        setRightSibling(root);
+
 
     }
 
-    private static void setRightSibling(BinaryTreeNodeWithNext<Integer> root) {
-        if(root==null){
-            return;
-        }
-        setRightSibling((BinaryTreeNodeWithNext<Integer>) root.left);
 
-        if(root.left!=null){
-            BinaryTreeNodeWithNext<Integer> left = (BinaryTreeNodeWithNext<Integer>) root.left;
-            left.next = (BinaryTreeNodeWithNext<Integer>) root.right;
-        }
-        setRightSibling((BinaryTreeNodeWithNext<Integer>) root.right);
-    }
 }

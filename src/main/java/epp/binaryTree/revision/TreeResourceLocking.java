@@ -48,21 +48,20 @@ public class TreeResourceLocking<T extends Comparable<T>> {
     }
 
     public boolean lock(BinaryTreeNodeWithParent<Resource<T>> node) {
-        if (node.data.locked) {
-            return true;
-        }
-        if (node.data.lockedCount > 0) {
+        if (node.data.locked || node.data.lockedCount > 0) {
             return false;
         }
-        BinaryTreeNodeWithParent<Resource<T>> current = node;
+
+        BinaryTreeNodeWithParent<Resource<T>> current = node.parent;
         while (current != null) {
             if (current.data.locked) {
                 return false;
             }
             current=current.parent;
         }
-        current = node;
-        current.data.locked = true;
+
+        node.data.locked = true;
+        current = node.parent;
         while (current != null) {
             current.data.lockedCount++;
             current = current.parent;
@@ -71,14 +70,15 @@ public class TreeResourceLocking<T extends Comparable<T>> {
     }
 
     public void unlock(BinaryTreeNodeWithParent<Resource<T>> node) {
-        if (!node.data.locked) {
-            return;
+        if (node.data.locked) {
+            node.data.locked = false;
+            BinaryTreeNodeWithParent<Resource<T>> current = node.parent;
+            while (current != null) {
+                node.data.lockedCount--;
+                node = node.parent;
+            }
         }
-        node.data.locked = false;
-        while (node != null) {
-            node.data.lockedCount--;
-            node = node.parent;
-        }
+
     }
 
 }

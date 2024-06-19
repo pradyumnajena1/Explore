@@ -1,63 +1,75 @@
 package epp.binaryTree.revision;
 
+import epp.binaryTree.BinaryTreeNode;
 import epp.binaryTree.BinaryTreeNodeWithParent;
 import epp.binaryTree.BinaryTreeUtils;
 import epp.binarysearchtree.BSTUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreateTreeFromInOrderAndPreOrderTraversal {
-    public static void main(String[] args) {
-        BinaryTreeNodeWithParent<Integer> root = BSTUtils.buildBSTWithParentWithUniqueValues(10,1,12);
-        System.out.println(root);
-        List<Integer> inOrderTraversal = BinaryTreeUtils.inOrderTraversal(root);
-        List<Integer> preOrderTraversal = BinaryTreeUtils.preOrderTraversal(root);
-        BinaryTreeNodeWithParent<Integer> newRoot =  createTreeFromInOrderAndPreOrder(inOrderTraversal,
-                preOrderTraversal);
-        System.out.println(newRoot);
+  public static void main(String[] args) {
+    BinaryTreeNode<Integer> root = BSTUtils.buildBSTWithUniqueValues(10, 1, 12);
+    System.out.println(root);
+    List<Integer> inOrderTraversal = BinaryTreeUtils.inOrderTraversal(root);
+    List<Integer> preOrderTraversal = BinaryTreeUtils.preOrderTraversal(root);
+    BinaryTreeNode<Integer> newRoot =
+        createTreeFromInOrderAndPreOrder(inOrderTraversal, preOrderTraversal);
+    System.out.println(newRoot);
+  }
+
+  private static BinaryTreeNode<Integer> createTreeFromInOrderAndPreOrder(
+      List<Integer> inOrderTraversal, List<Integer> preOrderTraversal) {
+    Map<Integer, Integer> inorderNodeToIndexMap = new HashMap<>();
+    for (int i = 0; i < inOrderTraversal.size(); i++) {
+      inorderNodeToIndexMap.put(inOrderTraversal.get(i), i);
     }
 
-    private static BinaryTreeNodeWithParent<Integer> createTreeFromInOrderAndPreOrder(List<Integer> inOrderTraversal, List<Integer> preOrderTraversal) {
-        if(inOrderTraversal==null|| preOrderTraversal==null ){
-            return null;
-        }
-        Integer[] inOrderTraversalArray = inOrderTraversal.toArray(new Integer[0]);
-        Integer[] preOrderTraversalArray = preOrderTraversal.toArray(new Integer[0]);
-       return createTreeFromInOrderAndPreOrder(inOrderTraversalArray,
-                preOrderTraversalArray);
+    return createTreeFromInOrderAndPreOrder(
+        inOrderTraversal,
+        0,
+        inOrderTraversal.size(),
+        preOrderTraversal,
+        0,
+        preOrderTraversal.size(),
+        inorderNodeToIndexMap);
+  }
 
+  private static BinaryTreeNode<Integer> createTreeFromInOrderAndPreOrder(
+      List<Integer> inOrderTraversal,
+      int inOrderStart,
+      int inOrderEnd,
+      List<Integer> preOrderTraversal,
+      int preOrderStart,
+      int preOrderEnd,
+      Map<Integer, Integer> inorderNodeToIndexMap) {
+
+    if (inOrderEnd <= inOrderStart || preOrderEnd <= preOrderStart) {
+      return null;
     }
+    int rootInorderIndex = inorderNodeToIndexMap.get(preOrderTraversal.get(preOrderStart));
 
-    private static BinaryTreeNodeWithParent<Integer> createTreeFromInOrderAndPreOrder(Integer[] inOrderTraversalArray, Integer[] preOrderTraversalArray) {
-         return createTreeFromInOrderAndPreOrder(inOrderTraversalArray,0,inOrderTraversalArray.length-1,
-                 preOrderTraversalArray,0,preOrderTraversalArray.length-1);
-    }
-
-    private static BinaryTreeNodeWithParent<Integer> createTreeFromInOrderAndPreOrder(Integer[] inOrderTraversalArray
-            , int inStart, int inEnd, Integer[] preOrderTraversalArray, int preStart, int preEnd) {
-        if(inStart>inEnd || preStart>preEnd){
-            return null;
-        }
-        if(preStart==preEnd){
-            return new BinaryTreeNodeWithParent<>(preOrderTraversalArray[preStart]);
-        }
-
-        Integer root = preOrderTraversalArray[preStart];
-        int rootIndex = Arrays.binarySearch(inOrderTraversalArray, inStart, inEnd, root);
-        int leftStart = inStart;
-        int leftEnd = rootIndex-1;
-
-        int rightStart = rootIndex+1;
-        int rightEnd  = inEnd;
-        int leftSize =  leftEnd - leftStart + 1;
-
-        BinaryTreeNodeWithParent<Integer> rootNode = new BinaryTreeNodeWithParent<>(root);
-        rootNode.left = createTreeFromInOrderAndPreOrder(inOrderTraversalArray,leftStart,leftEnd,
-                preOrderTraversalArray,preStart+1,preStart + leftSize);
-
-        rootNode.right = createTreeFromInOrderAndPreOrder(inOrderTraversalArray,rightStart,rightEnd,
-                preOrderTraversalArray,preStart+leftSize+1,preEnd);
-        return rootNode;
-    }
+    int leftSize = rootInorderIndex - inOrderStart;
+    return new BinaryTreeNode<>(
+        preOrderTraversal.get(preOrderStart),
+        createTreeFromInOrderAndPreOrder(
+            inOrderTraversal,
+            inOrderStart,
+            rootInorderIndex,
+            preOrderTraversal,
+            preOrderStart + 1,
+            preOrderStart+1 + leftSize,
+            inorderNodeToIndexMap),
+        createTreeFromInOrderAndPreOrder(
+            inOrderTraversal,
+            rootInorderIndex + 1,
+            inOrderEnd,
+            preOrderTraversal,
+            preOrderStart + 1 + leftSize,
+            preOrderEnd,
+            inorderNodeToIndexMap));
+  }
 }

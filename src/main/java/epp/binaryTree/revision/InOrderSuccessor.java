@@ -18,23 +18,20 @@ public class InOrderSuccessor {
         if(node==null){
             return null;
         }
-        if(node.right!=null){
-            return getMinNode(node.right);
+        BinaryTreeNodeWithParent<Integer> iter = node;
+        if(iter.right!=null){
+            iter = iter.right;
+            while (iter.left!=null){
+                iter = iter.left;
+            }
+            return iter;
         }
         BinaryTreeNodeWithParent<Integer> current = node ;
-        BinaryTreeNodeWithParent<Integer> parent = node.parent;
-        while (parent!=null&&parent.right==current){
-            current=parent;
-            parent=parent.parent;
+        while (current.parent!=null&&current.parent.right==current){
+            current=current.parent;
         }
-        return parent;
+        return current.parent;
     }
 
-    private static BinaryTreeNodeWithParent<Integer> getMinNode(BinaryTreeNodeWithParent<Integer> node) {
-        BinaryTreeNodeWithParent<Integer> current = node;
-        while (current!=null&&current.left!=null){
-            current = current.left;
-        }
-        return current;
-    }
+
 }

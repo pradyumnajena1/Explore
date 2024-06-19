@@ -2,9 +2,7 @@ package epp.binaryTree.revision;
 
 import epp.binaryTree.BinaryTreeNodeWithSize;
 import epp.binarysearchtree.BSTUtils;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FindKthNodeFromBSTWithSize {
     public static void main(String[] args) {
@@ -12,28 +10,48 @@ public class FindKthNodeFromBSTWithSize {
         System.out.println(root);
         BinaryTreeNodeWithSize<Integer> node =  findKthNodeFromBSTWithSize(root,7);
         System.out.println(node);
+
+        node =  findKthNodeFromBSTWithSizeIter(root,7);
+        System.out.println(node);
     }
 
-    private static BinaryTreeNodeWithSize<Integer> findKthNodeFromBSTWithSize(BinaryTreeNodeWithSize<Integer> root, int index) {
-        List<BinaryTreeNodeWithSize<Integer>> resultHolder = new ArrayList<>();
+    public static BinaryTreeNodeWithSize<Integer> findKthNodeFromBSTWithSize(BinaryTreeNodeWithSize<Integer> root,
+                                                                        int index) {
+    AtomicReference<BinaryTreeNodeWithSize<Integer>> resultHolder = new AtomicReference<>();
         findKthNodeFromBSTWithSize(root,index,resultHolder);
-        return resultHolder.size()>0? resultHolder.get(0):null;
+        return  resultHolder.get() ;
     }
 
-    private static void findKthNodeFromBSTWithSize(BinaryTreeNodeWithSize<Integer> root, int index, List<BinaryTreeNodeWithSize<Integer>> resultHolder) {
-        if(root==null){
-            return;
+    public static BinaryTreeNodeWithSize<Integer> findKthNodeFromBSTWithSizeIter(BinaryTreeNodeWithSize<Integer> root,
+                                                                             int index) {
+        BinaryTreeNodeWithSize<Integer> iter = root;
+        while (iter!=null){
+            int leftSize = iter.left==null?0:root.left.size;
+            if(index==leftSize+1){
+                return iter;
+            }else if(index<=leftSize){
+                iter = iter.left;
+            }else{
+                index = index -leftSize-1;
+                iter = iter.right;
+            }
         }
-        int leftSize = 0;
-        if(root.left!=null){
-              leftSize = root.left.size;
+        return null;
+    }
+
+    public static void findKthNodeFromBSTWithSize(BinaryTreeNodeWithSize<Integer> root, int index,
+                                                   AtomicReference<BinaryTreeNodeWithSize<Integer>> resultHolder) {
+        if(root!=null){
+            int leftSize = root.left==null?0:root.left.size;
+
+            if(index==leftSize+1){
+                resultHolder.set(root);
+            }else if(index<=leftSize){
+                findKthNodeFromBSTWithSize(root.left,index,resultHolder);
+            }else{
+                findKthNodeFromBSTWithSize(root.right,index-leftSize-1,resultHolder);
+            }
         }
-        if(index==leftSize+1){
-            resultHolder.add(root);
-        }else if(index<=leftSize){
-            findKthNodeFromBSTWithSize(root.left,index,resultHolder);
-        }else{
-            findKthNodeFromBSTWithSize(root.right,index-leftSize-1,resultHolder);
-        }
+
     }
 }
