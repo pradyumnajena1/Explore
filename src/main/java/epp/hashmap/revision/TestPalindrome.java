@@ -36,11 +36,12 @@ public class TestPalindrome {
      */
 
     private static boolean isPalindrome(String s) {
-        Map<Character, Long> frequencyMap =
+        Map<Character, Integer> frequencyMap =
                 s.chars().mapToObj(x -> Character.valueOf((char) x)).collect(Collectors.groupingBy(Function.identity(),
-                Collectors.counting()));
+                Collectors.summingInt(e->1)));
 
-        Long oddCount = frequencyMap.entrySet().stream().filter(x -> x.getValue() % 2 == 1).collect(Collectors.counting());
+        int oddCount =
+                frequencyMap.entrySet().stream().filter(x -> x.getValue() % 2 == 1).collect(Collectors.summingInt(e->1));
 
         return oddCount<=1;
     }

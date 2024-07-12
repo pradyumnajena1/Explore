@@ -26,31 +26,22 @@ public class Fibonacci {
         if(n<=1){
             return 1;
         }
-
-        if(cache.containsKey(n)){
-            return cache.get(n);
-        }else{
+        if(!cache.containsKey(n)){
             int term = getFibonacciNumber(n-2, cache) + getFibonacciNumber(n - 1, cache);
             cache.put(n,term);
-            return term;
         }
+        return cache.get(n);
     }
 
     private static List<Integer> getFibonacciSequenceIterative(int n){
 
         List<Integer> result = new ArrayList<>();
+        result.add(0);
         result.add(1);
-        if(n==0){
-            return result;
-        }
-        result.add(1);
-        if(n==1){
-            return result;
-        }
         for(int i=2;i<=n;i++){
             int next = result.get(result.size()-1)+result.get(result.size()-2);
             result.add(next);
         }
-        return result;
+        return result.subList(0,n+1 );
     }
 }

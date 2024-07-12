@@ -7,26 +7,26 @@ import java.util.Map;
 
 public class NearestRepeatedEntriesInArray {
     public static void main(String[] args) {
-        int[] values = ArrayUtils.randomArray(20,1,60);
-        ArrayUtils.printArray(values);
-        int nearestRepeatedEntry = findNearestRepeatedEntry(values);
+
+        int nearestRepeatedEntry = findNearestRepeatedEntry(new String[]{"All", "work", "and", "no", "play",
+                "makes", "for", "no", "work", "no", "fun", "and", "no", "results"});
         System.out.println(nearestRepeatedEntry);
 
     }
 
-    private static int findNearestRepeatedEntry(int[] values) {
-        Map<Integer,Integer> lastIndices = new HashMap<>();
+    private static<T> int findNearestRepeatedEntry(T[] values) {
+        Map<T,Integer> lastIndices = new HashMap<>();
         int nearest = Integer.MAX_VALUE;
         int nearestRepeatedIndex = -1;
         for(int i=0;i<values.length;i++){
-           Integer lastIndex =  lastIndices.get(values[i]);
+           Integer lastIndex =  lastIndices.put(values[i],i);
            if(lastIndex!=null){
                if(i-lastIndex<nearest){
                    nearest = i-lastIndex;
                    nearestRepeatedIndex = i;
                }
            }
-           lastIndices.put(values[i],i);
+
         }
         return nearestRepeatedIndex;
     }

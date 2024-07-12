@@ -9,7 +9,8 @@ import java.util.List;
 
 public class LongestNonDecreasingSubSequence {
     public static void main(String[] args) {
-        int[] values = ArrayUtils.randomArray(10, 1, 20);
+      //  int[] values = ArrayUtils.randomArray(10, 1, 20);
+        int[] values =  {4, 10, 9, 13, 9, 12, 5, 9, 14, 1};
         ArrayUtils.printArray(values);
         Pair<Integer, List<Integer>> maxSequence = longestIncreasingSubSequence(values);
         System.out.println(maxSequence);
@@ -33,7 +34,7 @@ public class LongestNonDecreasingSubSequence {
             if (values[i] >= result.get(result.size() - 1)) {
                 result.add(values[i]);
             } else {
-                int index = Collections.binarySearch(result, values[i]);
+                int index = ArrayUtils.findFirstElementGreaterThan(result, values[i]);
                 if (index < 0) {
                     index = -(index + 1);
                 }
@@ -42,6 +43,8 @@ public class LongestNonDecreasingSubSequence {
         }
         return new Pair<>(result.size(), result);
     }
+
+
 
     private static Pair<Integer, List<Integer>> longestIncreasingSubSequence(int[] values) {
         Pair<Integer, Integer>[] lisLength = ArrayUtils.createArray(Pair.class, values.length);

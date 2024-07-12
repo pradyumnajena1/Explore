@@ -23,14 +23,17 @@ public class CheckAnonymousLetter {
         }
 
         Map<Character, Long> charFrequency_letter = MapUtils.getCharFrequency(letter);
-        Map<Character, Long> charFrequency_magazine = MapUtils.getCharFrequency(magazine);
-
-        for (Map.Entry<Character, Long> entry : charFrequency_letter.entrySet()) {
-            if (entry.getValue() > charFrequency_magazine.getOrDefault(entry.getKey(), 0L)) {
-                return false;
+        for(char c: magazine.toCharArray()){
+            if(charFrequency_letter.containsKey(c)){
+                charFrequency_letter.put(c,charFrequency_letter.get(c)-1);
+                if(charFrequency_letter.get(c)==0){
+                    charFrequency_letter.remove(c);
+                }
+                if(charFrequency_letter.isEmpty()){
+                    return true;
+                }
             }
-
         }
-        return true;
+        return false;
     }
 }

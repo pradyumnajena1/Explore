@@ -1,83 +1,163 @@
 package epp.dp.revision;
 
-import epp.Pair;
-import epp.Triplet;
 import epp.array.ArrayUtils;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CheckIfArrayAppearsInMatrix {
-    public static void main(String[] args) {
-        int[][] matrix = ArrayUtils.createRandomMNMatrix(3, 5, 1, 5);
-        int[] array = ArrayUtils.randomArray(6, 1, 5);
-        ArrayUtils.print2DArray(matrix);
-        ArrayUtils.printArray(array);
-        List<Pair<Integer, Integer>> sequence = isPresent(matrix, array);
-        System.out.println(sequence);
+  public static void main(String[] args) {
+    int[][] matrix = {{5, 1, 5, 4, 1}, {4, 4, 4, 1, 3}, {2, 1, 5, 5, 5}};
+    int[] array = {1, 2, 4, 5};
+    ArrayUtils.print2DArray(matrix);
+    ArrayUtils.printArray(array);
+    System.out.println(checkIfArrayAppears(matrix, array));
+    System.out.println(checkIfArrayAppearsNoRepeat(matrix, array));
+    enumerateArrayAppearsNoRepeat(matrix, array);
+  }
 
-        System.out.println( ArrayUtils.getNeighbours(matrix.length-1,matrix[0].length-1, 2, 0, false));
+  public static boolean checkIfArrayAppears(int[][] matrix, int[] array) {
+    Set<List<Integer>> previousAttempts = new HashSet<>();
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[0].length; j++) {
+        if (checkIfArrayAppears(matrix, array, i, j, 0, previousAttempts)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private static boolean checkIfArrayAppears(
+      int[][] matrix, int[] array, int i, int j, int offset, Set<List<Integer>> previousAttempts) {
+    if (offset == array.length) {
+      return true;
+    }
+    if (i >= matrix.length
+        || i < 0
+        || j < 0
+        || j >= matrix[0].length
+        || previousAttempts.contains(List.of(i, j, offset))) {
+      return false;
     }
 
-    private static List<Pair<Integer, Integer>> isPresent(int[][] matrix, int[] array) {
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                if (matrix[i][j] == array[0]) {
-                    List<Pair<Integer, Integer>> list = isPresent(matrix, array, new Pair<>(i, j), 0);
-                    if (list != null) {
-                        return list;
-                    }
-                }
-            }
-        }
-        return null;
+    if (matrix[i][j] == array[offset]) {
+      boolean remaining =
+          checkIfArrayAppears(matrix, array, i - 1, j, offset + 1, previousAttempts)
+              || checkIfArrayAppears(matrix, array, i + 1, j, offset + 1, previousAttempts)
+              || checkIfArrayAppears(matrix, array, i, j - 1, offset + 1, previousAttempts)
+              || checkIfArrayAppears(matrix, array, i, j + 1, offset + 1, previousAttempts);
+      if (remaining) {
+        return true;
+      }
     }
 
-    private static List<Pair<Integer, Integer>> isPresent(int[][] matrix, int[] array, Pair<Integer, Integer> source, int index) {
-        Comparator<Triplet<Integer, Integer, Integer>> tripletComparator =
-                Comparator.comparingInt((Triplet<Integer, Integer, Integer> x)->x.getFirst())
-                        .thenComparingInt((Triplet<Integer, Integer, Integer> x)->x.getSecond())
-                        .thenComparingInt((Triplet<Integer, Integer, Integer> x)->x.getThird());
-        Map<Triplet<Integer, Integer, Integer>, List<Pair<Integer, Integer>>> cache =
-                new TreeMap<>(tripletComparator);
+    previousAttempts.add(List.of(i, j, offset));
+    return false;
+  }
 
-
-        List<Pair<Integer, Integer>> result = isPresentRecurse(matrix, array, source, index, cache);
-        for(Map.Entry<Triplet<Integer, Integer, Integer>, List<Pair<Integer, Integer>>> entry:cache.entrySet()){
-            System.out.println(entry);
+  public static boolean checkIfArrayAppearsNoRepeat(int[][] matrix, int[] array) {
+    Set<List<Integer>> previousAttempts = new HashSet<>();
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[0].length; j++) {
+        if (checkIfArrayAppearsNoRepeat(
+            matrix, array, i, j, 0, previousAttempts, new ArrayList<>())) {
+          return true;
         }
-        return result;
+      }
+    }
+    return false;
+  }
+
+  private static boolean checkIfArrayAppearsNoRepeat(
+      int[][] matrix,
+      int[] array,
+      int i,
+      int j,
+      int offset,
+      Set<List<Integer>> previousAttempts,
+      List<List<Integer>> path) {
+    if (offset == array.length) {
+      return true;
+    }
+    if (i >= matrix.length
+        || i < 0
+        || j < 0
+        || j >= matrix[0].length
+        || previousAttempts.contains(List.of(i, j, offset))
+        || path.contains(List.of(i, j))) {
+      return false;
     }
 
-    private static List<Pair<Integer, Integer>> isPresentRecurse(int[][] matrix, int[] array, Pair<Integer, Integer> source, int index, Map<Triplet<Integer, Integer, Integer>, List<Pair<Integer, Integer>>> cache) {
-        if (index == array.length) {
-            return new ArrayList<>();
-        }
-        if (matrix[source.getFirst()][source.getSecond()] != array[index]) {
-            return null;
-        }
-
-        Triplet<Integer, Integer, Integer> key = new Triplet<>(source.getFirst(), source.getSecond(), index);
-        if (cache.containsKey(key)) {
-            return cache.get(key);
-        }
-
-        List<Pair<Integer, Integer>> neighbours =ArrayUtils.getNeighbours(matrix.length-1,matrix[0].length-1, source,
-                true);
-        for (Pair<Integer, Integer> neighbour : neighbours) {
-
-            List<Pair<Integer, Integer>> partial = isPresentRecurse(matrix, array, neighbour, index + 1, cache);
-            if (partial != null) {
-                List<Pair<Integer, Integer>> result = new ArrayList<>();
-                result.add(source);
-                result.addAll(partial);
-
-                cache.put(key, result);
-                break;
-
-            }
-        }
-        return cache.get(key);
+    if (matrix[i][j] == array[offset]) {
+      path.add(List.of(i, j));
+      boolean remaining =
+          checkIfArrayAppearsNoRepeat(matrix, array, i - 1, j, offset + 1, previousAttempts, path)
+              || checkIfArrayAppearsNoRepeat(
+                  matrix, array, i + 1, j, offset + 1, previousAttempts, path)
+              || checkIfArrayAppearsNoRepeat(
+                  matrix, array, i, j - 1, offset + 1, previousAttempts, path)
+              || checkIfArrayAppearsNoRepeat(
+                  matrix, array, i, j + 1, offset + 1, previousAttempts, path);
+      path.remove(path.size() - 1);
+      if (remaining) {
+        return true;
+      }
     }
 
+    previousAttempts.add(List.of(i, j, offset));
+    return false;
+  }
 
+  public static void enumerateArrayAppearsNoRepeat(int[][] matrix, int[] array) {
+    Set<List<Integer>> previousAttempts = new HashSet<>();
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[0].length; j++) {
+        enumerateArrayAppearsNoRepeat(matrix, array, i, j, 0, previousAttempts, new ArrayList<>());
+      }
+    }
+  }
+
+  private static boolean enumerateArrayAppearsNoRepeat(
+      int[][] matrix,
+      int[] array,
+      int i,
+      int j,
+      int offset,
+      Set<List<Integer>> previousAttempts,
+      List<List<Integer>> path) {
+    if (offset == array.length) {
+      System.out.println(path);
+      return true;
+    }
+    if (i >= matrix.length
+        || i < 0
+        || j < 0
+        || j >= matrix[0].length
+        || previousAttempts.contains(List.of(i, j, offset))
+        || path.contains(List.of(i, j))) {
+      return false;
+    }
+
+    if (matrix[i][j] == array[offset]) {
+      path.add(List.of(i, j));
+
+      boolean result =
+          enumerateArrayAppearsNoRepeat(matrix, array, i - 1, j, offset + 1, previousAttempts, path)
+              || enumerateArrayAppearsNoRepeat(
+                  matrix, array, i + 1, j, offset + 1, previousAttempts, path)
+              || enumerateArrayAppearsNoRepeat(
+                  matrix, array, i, j - 1, offset + 1, previousAttempts, path)
+              || enumerateArrayAppearsNoRepeat(
+                  matrix, array, i, j + 1, offset + 1, previousAttempts, path);
+
+      path.remove(path.size() - 1);
+      if (result) {
+        return true;
+      }
+    }
+    previousAttempts.add(List.of(i, j, offset));
+    return false;
+  }
 }

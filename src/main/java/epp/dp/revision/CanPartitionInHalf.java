@@ -1,50 +1,49 @@
 package epp.dp.revision;
 
-import epp.Triplet;
 import epp.array.ArrayUtils;
-
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CanPartitionInHalf {
-    public static void main(String[] args) {
-        boolean canPartition = false;
-        do {
-            int[] values = ArrayUtils.randomArray(20,10,50);
-            ArrayUtils.printArray(values);
-              canPartition =  canPartitionInHalf(values);
-            System.out.println(canPartition);
-        }while (!canPartition);
+  public static void main(String[] args) {
 
+    int[] values = {65, 35, 245, 195, 64, 150, 275, 155, 120, 320, 75, 40, 200, 100, 220, 99};
+    ArrayUtils.printArray(values);
+    boolean canPartition = canPartitionInHalf(values);
+    System.out.println(canPartition);
+  }
+
+  private static boolean canPartitionInHalf(int[] values) {
+    int sum = Arrays.stream(values).sum();
+    if (sum % 2 == 1) {
+      return false;
     }
+    int max = getMaxSum(values, sum / 2);
+    System.out.println(max);
+    return max == sum / 2;
+  }
 
-    private static boolean canPartitionInHalf(int[] values) {
-        int sum = Arrays.stream(values).sum();
-        System.out.println(sum);
-        if(sum%2==1){
-            return false;
-        }
-        Map<Triplet<Integer,Integer,Integer>,Boolean> cache = new HashMap<>();
-        return canPartitionInHalf(values,0,sum/2,sum/2,cache);
+  private static int getMaxSum(int[] values, int targetSum) {
+    Map<List<Integer>, Integer> cache = new HashMap<List<Integer>, Integer>();
+    return getMaxSum(values, targetSum, values.length - 1, cache);
+  }
+
+  private static int getMaxSum(
+      int[] values, int targetSum, int i, Map<List<Integer>, Integer> cache) {
+    if (i < 0 || targetSum == 0) {
+      return 0;
     }
-
-    private static boolean canPartitionInHalf(int[] values, int index, int left, int right, Map<Triplet<Integer, Integer, Integer>, Boolean> cache) {
-        if(index+2==values.length){
-            return values[index]==left&&values[index+1]==right || values[index]==right&&values[index+1]==left;
-        }
-        Triplet<Integer, Integer, Integer> key = new Triplet<>(index, left, right);
-        if(cache.containsKey(key)){
-            return cache.get(key);
-        }
-        Boolean result = false;
-        if(canPartitionInHalf(values,index+1,left-values[index],right, cache) ||
-                canPartitionInHalf(values,index+1,left,right-values[index], cache)){
-
-            result =  true;
-        }
-        cache.put(key,result);
-        return cache.get(key);
+    List<Integer> key = List.of(targetSum, i);
+    if (!cache.containsKey(key)) {
+      int nonIncluding = getMaxSum(values, targetSum, i - 1, cache);
+      int including =
+          targetSum - values[i] >= 0
+              ? values[i] + getMaxSum(values, targetSum - values[i], i - 1, cache)
+              : 0;
+      cache.put(key, Math.max(including, nonIncluding));
     }
-
+    return cache.get(key);
+  }
 }

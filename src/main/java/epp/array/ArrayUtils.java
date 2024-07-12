@@ -572,37 +572,40 @@ public class ArrayUtils {
     public static int findFirstElementGreaterThan(int[] values, int value) {
         return findFirstElementGreaterThan(values,value,0,values.length-1);
     }
+    public static int findFirstElementGreaterThan(List<Integer> values, int value) {
+        return findFirstElementGreaterThan(values.stream().mapToInt(Integer::intValue).toArray(),value,0,values.size()-1);
+    }
 
     public static int findLastElementSmallerThan(int[] values, int value) {
         return findLastElementSmallerThan(values,value,0,values.length-1);
     }
 
-    public static int findLastElementSmallerThan(int[] values, int value, int start, int end) {
+    public static int findLastElementSmallerThan(int[] values, int value, int left, int right) {
         Integer index  = null;
-        while (start<=end){
-            int mid = start+(end-start)/2;
+        while (left<=right){
+            int mid = left+(right-left)/2;
             if(values[mid]<value){
                 index = mid;
-                start=mid+1;
+                left=mid+1;
             }else{
-                end=mid-1;
+                right=mid-1;
             }
         }
-        return index!=null?index:-(start+1);
+        return index!=null?index:-(left+1);
     }
 
-    public static int findFirstElementGreaterThan(int[] values, int value, int start, int end) {
+    public static int findFirstElementGreaterThan(int[] values, int value, int left, int right) {
         Integer index  = null;
-        while (start<=end){
-            int mid = start+(end-start)/2;
+        while (left<=right){
+            int mid = left+(right-left)/2;
             if(value<values[mid]){
                 index = mid;
-                end=mid-1;
+                right=mid-1;
             }else{
-                start=mid+1;
+                left=mid+1;
             }
         }
-        return index!=null?index:-(start+1);
+        return index!=null?index:-(left+1);
     }
 
     public static List<Pair<Integer, Integer>> getNeighbours(int maxRow,int maxCol, Pair<Integer, Integer> source) {

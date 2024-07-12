@@ -1,17 +1,15 @@
 package epp.hashmap.revision;
 
-import epp.array.ArrayUtils;
-
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class SmallestSubArrayCoveringAllUniqueValues {
     public static void main(String[] args) {
-        int[] values = ArrayUtils.randomArray(20, 1, 8);
-        int[] requiredValues = Arrays.stream(values).boxed().collect(Collectors.toSet()).stream().mapToInt(x -> x.intValue()).toArray();
-        ArrayUtils.printArray(values);
-        ArrayUtils.printArray(requiredValues);
-        Range range = SmallestSubArrayCoveringAllValues.getSmallestSubArrayCover3(values, requiredValues);
+        List<String> paragraph = Arrays.asList("apple", "banana", "apple", "apple", "banana", "orange", "apple", "banana");
+        Set<String> keywords = new HashSet<>(Arrays.asList("banana", "orange"));
+        Range range =SmallestSubArrayCoveringAllValues.findSmallestSubArrayCover(paragraph, keywords);
         System.out.println(range);
     }
 }

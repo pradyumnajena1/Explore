@@ -32,9 +32,8 @@ public class RemoveDuplicates {
                 values[writePos++] = values[i];
             }
         }
-        int[] result = new int[writePos];
-        System.arraycopy(values,0,result,0,writePos);
-        return result;
+        Arrays.fill(values,writePos,values.length,0);
+        return values;
     }
 
     /**
@@ -51,8 +50,7 @@ public class RemoveDuplicates {
                  uniques.add(values[i]);
              }
          }
-         int[] result = new int[writePos];
-         System.arraycopy(values,0,result,0,writePos);
-         return result;
+        Arrays.fill(values,writePos,values.length,0);
+        return values;
     }
 }

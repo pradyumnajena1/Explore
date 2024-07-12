@@ -3,42 +3,47 @@ package epp.binarySearch.revision;
 import epp.array.ArrayUtils;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class OptimalMailBox {
+
     public static void main(String[] args) {
-        int[] distances = new int[]{10,12,14,18,22};
+        int[] distances = new int[]{10,12,14,38,192};
         int[] people = new int[]{5,3,2,7,2};
-        int mailBoxIndex = getOptimalMailBoxIndex(distances,people);
+    Building[] buildings = new Building[] {new Building(10,5),new Building(12,3),
+            new Building(14,2),new Building(38,7),new Building(192,2)};
+        int mailBoxIndex = getOptimalMailBoxIndex(buildings);
         System.out.println(mailBoxIndex);
-        mailBoxIndex = getOptimalMailBoxIndex(distances,people);
+        mailBoxIndex = getOptimalMailBoxIndex2(buildings);
         System.out.println(mailBoxIndex);
     }
 
-    private static int getOptimalMailBoxIndex(int[] distances, int[] people) {
-        if(distances==null||people==null||people.length!= distances.length){
-            throw new IllegalArgumentException("values are null or lengths not matching");
+    private static int getOptimalMailBoxIndex(Building[] buildings ) {
+        if(buildings==null||buildings.length==0 ){
+            throw new IllegalArgumentException("values are null");
         }
-        int[] peopleLeft = new int[people.length];
-        peopleLeft[0] = people[0];
-        for(int i=1;i<people.length;i++){
-            peopleLeft[i] = people[i]+peopleLeft[i-1];
+        int[] peopleLeft = new int[buildings.length];
+        peopleLeft[0] = buildings[0].people;
+        for(int i=1;i<peopleLeft.length;i++){
+            peopleLeft[i] = buildings[i].people+peopleLeft[i-1];
         }
-        int[] peopleRight = new int[people.length];
-        peopleRight[people.length-1] = people[people.length-1];
-        for(int i=people.length-2;i>=0;i--){
-            peopleRight[i] = people[i]+peopleRight[i+1];
+        int[] peopleRight = new int[buildings.length];
+        peopleRight[buildings.length-1] = buildings[buildings.length-1].people;
+        for(int i=peopleRight.length-2;i>=0;i--){
+            peopleRight[i] = buildings[i].people+peopleRight[i+1];
         }
         ArrayUtils.printArray(peopleLeft);
         ArrayUtils.printArray(peopleRight);
-        int[] totalDistance  = new int[people.length];
-        for(int i=0;i<people.length;i++){
-            totalDistance[0] += people[i]*(distances[i]-distances[0]);
+        int[] totalDistance  = new int[buildings.length];
+        for(int i=0;i<buildings.length;i++){
+            totalDistance[0] += buildings[i].people*(buildings[i].distance-buildings[0].distance);
         }
         int minDistance = totalDistance[0];
         int minIndex = 0;
-        for(int i=1;i<people.length;i++){
+        for(int i=1;i<buildings.length;i++){
             totalDistance[i] = totalDistance[i-1] +
-                    (peopleLeft[i-1]*(distances[i]-distances[i-1])) -  (peopleRight[i]*(distances[i]-distances[i-1]));
+                    (peopleLeft[i-1]*(buildings[i].distance-buildings[i-1].distance))
+                    -  (peopleRight[i]*(buildings[i].distance-buildings[i-1].distance));
             if(totalDistance[i]<minDistance){
                 minDistance = totalDistance[i];
                 minIndex = i;
@@ -47,28 +52,45 @@ public class OptimalMailBox {
         ArrayUtils.printArray(totalDistance);
         return minIndex;
     }
-    private static int getOptimalMailBoxIndex2(int[] distances, int[] people) {
-        int totalResidents = Arrays.stream(people).sum();
-        if(totalResidents%2==1){
-            int median = totalResidents/2+1;
-            return findBuildingForResident(median,people);
-        }else{
-            int mid1 = totalResidents/2;
-            int mid2 = totalResidents/2+1;
-            return findBuildingForResident(mid1,people);
+
+    private static int getOptimalMailBoxIndex2(Building[] buildings) {
+        if(buildings==null||buildings.length==0 ){
+            throw new IllegalArgumentException("values are null");
         }
+        Arrays.sort(buildings, Comparator.comparingInt(Building::getDistance));
+        int totalResidents = Arrays.stream(buildings).mapToInt(Building::getPeople).sum();
+        return findBuildingForResident(totalResidents/2,buildings);
+
     }
 
-    private static int findBuildingForResident(int median, int[] people) {
+    private static int findBuildingForResident(int median, Building[] buildings) {
         int sum =0;
         int index = 0;
-        for(int i=0;i<people.length;i++){
-            sum+=people[i];
+        for(int i=0;i<buildings.length;i++){
+            sum+=buildings[i].people;
             if(sum>=median){
                 index = i;
                 break;
             }
         }
         return index ;
+    }
+
+    private static class Building{
+        int distance;
+        int people;
+
+        public Building(int distance, int people) {
+            this.distance = distance;
+            this.people = people;
+        }
+
+        public int getDistance() {
+            return distance;
+        }
+
+        public int getPeople() {
+            return people;
+        }
     }
 }

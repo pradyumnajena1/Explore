@@ -1,51 +1,48 @@
 package epp.recursion.revision;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PalindromicDecomposition {
-    public static void main(String[] args) {
-        String s = "0204451881";
-        Set<String> palindromes = decomposeIntoPalindromes(s);
-        System.out.println(palindromes);
+  public static void main(String[] args) {
+    String s = "0204451881";
+    List<List<String>> palindromes = decomposeIntoPalindromes(s);
+    System.out.println(palindromes);
+  }
+
+  private static List<List<String>> decomposeIntoPalindromes(String s) {
+    List<List<String>> result = new ArrayList<>();
+    List<String> partial = new ArrayList<>();
+    decomposeIntoPalindromes(s, 0, partial, result);
+    return result;
+  }
+
+  private static void decomposeIntoPalindromes(
+      String s, int offset, List<String> partial, List<List<String>> result) {
+
+    if (offset == s.length()) {
+      result.add(new ArrayList<>(partial));
+      return;
     }
-
-    private static Set<String> decomposeIntoPalindromes(String s) {
-        return decomposeIntoPalindromes(s, 0);
+    // try bigger prefix first as every single char is palindrome
+    for (int i = offset + 1; i <= s.length(); i++) {
+      String prefix = s.substring(offset, i);
+      if (isPalindrome(prefix)) {
+        partial.add(prefix);
+        decomposeIntoPalindromes(s, i, partial, result);
+        partial.remove(partial.size() - 1);
+      }
     }
-
-    private static Set<String> decomposeIntoPalindromes(String s, int start ) {
-        HashSet<String> result = new HashSet<>();
-       if (start == s.length()) {
-            return result;
-        }
-         // try bigger prefix first as every single char is palindrome
-        for (int i = s.length(); i >=start+1  ; i--) {
-            String prefix = s.substring(start, i);
-
-            if (isPalindrome(prefix, 0,prefix.length()-1)  ) {
-                Set<String> palindromeSplits = decomposeIntoPalindromes(s, i );
-                if(palindromeSplits!=null){
-                    result.add(prefix);
-                    result.addAll(palindromeSplits);
-                    return result;
-                }
-
-            }
-        }
-        return null;
+  }
+  private static boolean isPalindrome(String string ) {
+    return isPalindrome(string,0,string.length()-1);
+  }
+  private static boolean isPalindrome(String string, int start, int end) {
+    while (start < end) {
+      if (string.charAt(start++) != string.charAt(end--)) {
+        return false;
+      }
     }
-
-
-
-    private static boolean isPalindrome(String string, int start, int end) {
-        while (start < end) {
-            if (string.charAt(start) != string.charAt(end)) {
-                return false;
-            }
-            start++;
-            end--;
-        }
-        return true;
-    }
+    return true;
+  }
 }

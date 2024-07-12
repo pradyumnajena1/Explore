@@ -1,130 +1,167 @@
 package epp.hashmap.revision;
 
-import epp.array.ArrayUtils;
-import epp.DoubleLinkedList;
-import epp.DoubleLinkedListNode;
-
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SmallestSubArrayCoveringAllValues {
-    public static void main(String[] args) {
-        int[] values = ArrayUtils.randomArray(20, 1, 20);
-        int[] randomIndices = ArrayUtils.randomArray(5, 0, 10);
-        Set<Integer> randomValues = new HashSet<>();
-        for (int i = 0; i < randomIndices.length; i++) {
-            randomValues.add(values[randomIndices[i]]);
-        }
-        int[] requiredArray = randomValues.stream().mapToInt(x -> x.intValue()).toArray();
-        ArrayUtils.printArray(values);
-        ArrayUtils.printArray(requiredArray);
-        Range range = getSmallestSubArrayCover(values, requiredArray);
-        System.out.println(range);
+  public static void main(String[] args) {
+    List<String> paragraph =
+        Arrays.asList("apple", "banana", "apple", "apple", "banana", "orange", "apple", "banana");
+    Set<String> keywords = new HashSet<>(Arrays.asList("banana", "orange"));
+    Range range = findSmallestSubArrayCover(paragraph, keywords);
+    System.out.println(range);
 
-        range = getSmallestSubArrayCover2(values, requiredArray);
-        System.out.println(range);
+    range = findSmallestSubArrayCover2(paragraph, keywords);
+    System.out.println(range);
 
-        range = getSmallestSubArrayCover3(values, requiredArray);
-        System.out.println(range);
+    range = findSmallestSubArrayContainingAllUniqueValues(paragraph);
+    System.out.println(range);
 
+    ArrayList<Integer> values = new ArrayList<>(List.of(1, 2, 2, 1, 3, 3, 1, 1, 4, 2, 5, 4, 4, 5));
+    rearrangeArrayShortestSubArrayOfUniqueValuesHasMaxLength(values);
+    System.out.println(values);
+
+    values = new ArrayList<>(List.of(1, 2, 2, 1, 3, 3, 1, 1, 4, 2, 5, 4, 4, 5));
+    rearrangeArraySoThatNoTwoEqualElementAreCloserThanK(values, 3);
+    System.out.println(values);
+  }
+
+  public static <T> Range findSmallestSubArrayCover(List<T> values, Set<T> keyValues) {
+    Map<T, Integer> keywordCountMap = new HashMap<>();
+    for (T keyValue : keyValues) {
+      keywordCountMap.put(keyValue, 0);
     }
-
-    private static Range getSmallestSubArrayCover(int[] values, int[] requiredArray) {
-        Map<Integer, Integer> value_to_location = new HashMap<>();
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-        Set<Integer> requiredSet = Arrays.stream(requiredArray).boxed().collect(Collectors.toSet());
-        Range minRange = null;
-        for (int i = 0; i < values.length; i++) {
-            if (requiredSet.contains(values[i])) {
-                Integer oldIndex = value_to_location.put(values[i], i);
-                if (minHeap.size() > 0 && minHeap.peek().equals(oldIndex)) {
-                    minHeap.poll();
-                }
-                minHeap.offer(i);
-                if (value_to_location.size() == requiredSet.size()) {
-                    Range range = new Range(minHeap.peek(), i);
-                    if (minRange == null || range.dist() < minRange.dist()) {
-                        minRange = range;
-                    }
-                }
-
-            }
+    int foundKeyWord = 0;
+    Range result = new Range(-1, -1);
+    for (int left = 0, right = 0; right < values.size(); right++) {
+      T inComing = values.get(right);
+      Integer keywordCount = keywordCountMap.get(inComing);
+      if (keywordCount != null) {
+        keywordCountMap.put(inComing, ++keywordCount);
+        if (keywordCount == 1) {
+          foundKeyWord++;
         }
+      }
 
-        return minRange;
-    }
-
-    private static Range getSmallestSubArrayCover2(int[] values, int[] requiredArray) {
-        Set<Integer> requiredSet = Arrays.stream(requiredArray).boxed().collect(Collectors.toSet());
-        int left = 0;
-        int right = 0;
-        Range minRange = null;
-        Map<Integer, Integer> q_set_freq = new HashMap<>();
-        while (right < values.length) {
-            while (right < values.length && q_set_freq.size() < requiredSet.size()) {
-                if (requiredSet.contains(values[right])) {
-                    q_set_freq.put(values[right], q_set_freq.getOrDefault(values[right], 0) + 1);
-                }
-                right++;
-            }
-
-            if (q_set_freq.size() == requiredSet.size()) {
-                if (minRange == null || minRange.dist() > right - left) {
-                    minRange = new Range(left, right - 1);
-                }
-            }
-
-            while (left < right && q_set_freq.size() == requiredSet.size()) {
-
-                if (requiredSet.contains(values[left])) {
-
-                    q_set_freq.put(values[left], q_set_freq.get(values[left]) - 1);
-                    if (q_set_freq.get(values[left]) == 0) {
-                        q_set_freq.remove(values[left]);
-                        if (minRange == null || minRange.dist() > right - left) {
-                            minRange = new Range(left, right - 1);
-                        }
-                    }
-
-                }
-                left++;
-            }
-
+      while (left < values.size() && foundKeyWord == keywordCountMap.size()) {
+        if ((result.getStart() == -1 && result.getEnd() == -1)
+            || result.dist() > right - left + 1) {
+          result = new Range(left, right);
         }
-        return minRange;
-    }
-
-    public static Range getSmallestSubArrayCover3(int[] values, int[] requiredArray) {
-        HashMap<Integer, DoubleLinkedListNode<Integer>> valueIndexMap = new HashMap<>();
-        DoubleLinkedList<Integer> queue = new DoubleLinkedList<>();
-        Set<Integer> requiredSet = Arrays.stream(requiredArray).boxed().collect(Collectors.toSet());
-
-        Range minRange = null;
-        for (int i = 0; i < values.length; i++) {
-            int value = values[i];
-            if (requiredSet.contains(value)) {
-
-                if (valueIndexMap.containsKey(value)) {
-                    DoubleLinkedListNode<Integer> node = valueIndexMap.get(value);
-                    queue.removeNode(node);
-                }
-                DoubleLinkedListNode<Integer> newNode = new DoubleLinkedListNode<>(i);
-                queue.addAtEnd(newNode);
-                valueIndexMap.put(value, newNode);
-
-
-                if (valueIndexMap.size() == requiredArray.length) {
-                    Integer first = queue.getFirst();
-                    int newDist = i - first + 1;
-                    if (minRange == null || minRange.dist() > newDist) {
-                        minRange = new Range(first, i);
-                    }
-                }
-            }
+        T outGoing = values.get(left);
+        keywordCount = keywordCountMap.get(outGoing);
+        if (keywordCount != null) {
+          keywordCountMap.put(outGoing, --keywordCount);
+          if (keywordCount == 0) {
+            foundKeyWord--;
+          }
         }
-
-        return minRange;
-
+        left++;
+      }
     }
+    return result;
+  }
 
+  public static <T> Range findSmallestSubArrayCover2(List<T> values, Set<T> keyValues) {
+    LinkedHashMap<T, Integer> lastLocationMap = new LinkedHashMap<>();
+
+    Range result = new Range(-1, -1);
+    for (int i = 0; i < values.size(); i++) {
+      T value = values.get(i);
+      if (keyValues.contains(value)) {
+        lastLocationMap.remove(value);
+        lastLocationMap.put(value, i);
+      }
+
+      if (lastLocationMap.size() == keyValues.size()) {
+        Integer firstEntry = getValueForFirstEntry(lastLocationMap);
+        if (result.getStart() == -1 || result.dist() > i - firstEntry + 1)
+          result = new Range(firstEntry, i);
+      }
+    }
+    return result;
+  }
+
+  private static <T> Integer getValueForFirstEntry(LinkedHashMap<T, Integer> m) {
+    // LinkedHashMap guarantees iteration over key-value pairs takes place in
+    // insertion order, most recent first.
+    Integer result = null;
+    for (Map.Entry<T, Integer> entry : m.entrySet()) {
+      result = entry.getValue();
+      break;
+    }
+    return result;
+  }
+
+  public static <T> Range findSmallestSubArrayContainingAllUniqueValues(List<T> values) {
+    Set<T> uniqueValues = new HashSet<>(values);
+    return findSmallestSubArrayCover2(values, uniqueValues);
+  }
+
+  /**
+   * Given an array A, rearrange the elements so that the shortest subarray containing all the
+   * distinct values in A has maximum possible length.
+   */
+  public static <T> void rearrangeArrayShortestSubArrayOfUniqueValuesHasMaxLength(List<T> values) {
+    Map<T, Long> freqMap =
+        values.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    PriorityQueue<Map.Entry<T, Long>> priorityQueue =
+        new PriorityQueue<>(Comparator.comparingLong(Map.Entry::getValue));
+    priorityQueue.addAll(freqMap.entrySet());
+
+    int leftIndex = 0;
+    int rightIndex = values.size() - 1;
+    int turn = 0;
+    while (priorityQueue.size() > 0) {
+      Map.Entry<T, Long> poll = priorityQueue.poll();
+      Long count = poll.getValue();
+      if (turn == 0) {
+        while (count > 0) {
+          values.set(leftIndex++, poll.getKey());
+          count--;
+        }
+      } else {
+        while (count > 0) {
+          values.set(rightIndex--, poll.getKey());
+          count--;
+        }
+      }
+      turn ^= 1;
+    }
+  }
+
+  /**
+   * Given an array A and a positive integer k, rearrange the elements so that no two equal elements
+   * are k or less apar
+   */
+  public static <T> void rearrangeArraySoThatNoTwoEqualElementAreCloserThanK(
+      List<T> values, int k) {
+    Map<T, Long> freqMap =
+        values.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    Comparator<Map.Entry<T, Long>> comparator =
+        Comparator.comparingLong((Map.Entry<T, Long> e) -> e.getValue()).reversed();
+    PriorityQueue<Map.Entry<T, Long>> priorityQueue = new PriorityQueue<>(comparator);
+    priorityQueue.addAll(freqMap.entrySet());
+    Queue<Map.Entry<T, Long>> waitQueue = new LinkedList<>();
+    int index = 0;
+
+    while (priorityQueue.size() > 0) {
+
+      Map.Entry<T, Long> current = priorityQueue.poll();
+      values.set(index++, current.getKey());
+      current.setValue(current.getValue() - 1);
+      waitQueue.add(current);
+
+      if (waitQueue.size() >= k) {
+        Map.Entry<T, Long> poll = waitQueue.poll();
+        if (poll.getValue() > 0) {
+          priorityQueue.offer(poll);
+        }
+      }
+    }
+    if (index != values.size()) {
+      throw new IllegalStateException("cant be arranged");
+    }
+  }
 }

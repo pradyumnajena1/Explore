@@ -3,9 +3,11 @@ package epp;
 import epp.array.ArrayUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ListUtils {
@@ -101,6 +103,11 @@ public class ListUtils {
             }
         }
         return index;
+    }
+
+    public static List<Integer> randomList(int size,int min,int max){
+        int[] values = ArrayUtils.randomArray(size, min, max);
+        return Arrays.stream(values).boxed().collect(Collectors.toList());
     }
 
 

@@ -15,27 +15,16 @@ public class FindSmallestItemInSortedAndRotatedArray {
     }
 
     public static int findSmallestItemInSortedAndRotatedArray(int[] values) {
-        Integer result = null;
-        int start = 0;
-        int end = values.length - 1;
-
-        while (start <= end) {
-            if (values[start] <= values[end]) {
-                result = values[start];
-                break;
+        int left = 0;
+        int right = values.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (values[mid] > values[right]) {
+                left = mid + 1;
             } else {
-                int mid = start + (end - start) / 2;
-                if (values[mid] < values[mid - 1] && values[mid] < values[mid + 1]) {
-                    result = values[mid];
-                    break;
-                } else if (values[mid] < values[start] && values[mid] < values[end]) {
-                    end = mid - 1;
-                } else {
-                    start = mid + 1;
-                }
+                right = mid;
             }
-
         }
-        return result;
+        return left;
     }
 }

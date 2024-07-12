@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PartitionIntoAnagramGroups {
     public static void main(String[] args) {
-        String[] values = { "eleven plus two","twelve plus one","god","dog" };
+        String[] values = { "debitcard", "elvis", "silent", "badcredit", "lives",
+                "freedom", "listen", "levis", "money" };
         Set<Set<String>> partition = partitionIntoAnagramGroups(values);
         System.out.println(partition);
     }
@@ -22,7 +24,7 @@ public class PartitionIntoAnagramGroups {
             set.add(value);
             groups.put(charFrequency,set);
         }
-        return new HashSet<>(groups.values());
+        return new HashSet<>(groups.values().stream().filter(group -> group.size()>1).collect(Collectors.toList()));
     }
 
 
