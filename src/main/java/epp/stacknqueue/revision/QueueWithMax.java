@@ -31,11 +31,20 @@ public class QueueWithMax <T extends Comparable<T>>{
         }
         return polled;
     }
+    public boolean isEmpty() {
+        return entriesQueue.isEmpty();
+    }
     public T max(){
         if(entriesQueue.isEmpty()){
             throw new IllegalStateException("Queue is empty");
         }
         return candidatesForMax.peek();
+    }
+    public T peek(){
+        if(entriesQueue.isEmpty()){
+            throw new IllegalStateException("Queue is empty");
+        }
+        return entriesQueue.peek();
     }
 
     public static void main(String[] args) {

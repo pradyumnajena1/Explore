@@ -10,6 +10,11 @@ public class PostingListNode {
         this.data = data;
     }
 
+    public PostingListNode(int data, PostingListNode next) {
+        this.data = data;
+        this.next = next;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

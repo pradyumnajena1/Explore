@@ -10,7 +10,7 @@ public class LongestSubstringWithMatchingParen {
         System.out.println(longestMatchingString);
     }
 
-    private static String longestMatchingSubstring(String expression) {
+    public static String longestMatchingSubstring(String expression) {
         Map<Character,Character> mapping = Map.of('(',')','[',']','{','}');
         Stack<Tuple> stack = new Stack<>();
         String result = "";
