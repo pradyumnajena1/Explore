@@ -89,13 +89,18 @@ public class MostVisitedPageTracker {
         }
     }
 
-    private static class PageFrequency implements Comparable<PageFrequency> {
+    private static class PageFrequency implements Comparable<PageFrequency> ,Cloneable {
         private String page;
         private int count;
 
         public PageFrequency(String page, int count) {
             this.page = page;
             this.count = count;
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            return super.clone();
         }
 
         @Override

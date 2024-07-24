@@ -71,7 +71,7 @@ public class ViewFromTop {
         return lines;
     }
 
-    private static class Line implements Comparable<Line>{
+    private static class Line implements Comparable<Line>,Cloneable{
         int start;
         int end;
         int height;
@@ -82,6 +82,11 @@ public class ViewFromTop {
             this.end = end;
             this.height = height;
             this.color = color;
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            return super.clone();
         }
 
         @Override

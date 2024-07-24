@@ -50,13 +50,19 @@ public class FindTheKthElement {
 
   public static int findKthItem(
       int[] values, int k, int start, int end, Comparator<Integer> comparator) {
-    int value = 0;
+    int kthItemIndex = findKthItemIndex(values, k, start, end, comparator);
+    return values[kthItemIndex];
+  }
+
+  public static int findKthItemIndex(
+          int[] values, int k, int start, int end, Comparator<Integer> comparator) {
+    int partition = start;
     int left = start;
     int right = end;
     while (left <= right) {
-      int partition = partition(values, left, right, comparator);
+        partition = partition(values, left, right, comparator);
       if (partition - start == k - 1) {
-        value = values[partition];
+
         break;
       } else if (partition - start > k - 1) {
         right = partition - 1;
@@ -64,7 +70,7 @@ public class FindTheKthElement {
         left = partition + 1;
       }
     }
-    return value;
+    return partition;
   }
 
   public static <T> T findKthItem(T[] values, int k, Comparator<T> comparator) {
@@ -76,13 +82,18 @@ public class FindTheKthElement {
   }
 
   public static <T> T findKthItem(T[] values, int k, int start, int end, Comparator<T> comparator) {
-    T value = null;
+    int kthItemIndex = findKthItemIndex(values, k, start, end, comparator);
+    return values[kthItemIndex];
+  }
+
+  public static <T> int findKthItemIndex(T[] values, int k, int start, int end, Comparator<T> comparator) {
+    int partition = start;
     int left = start;
     int right = end;
     while (left <= right) {
-      int partition = partition(values, left, right, comparator);
+        partition = partition(values, left, right, comparator);
       if (partition - start == k - 1) {
-        value = values[partition];
+
         break;
       } else if (partition - start > k - 1) {
         right = partition - 1;
@@ -90,18 +101,24 @@ public class FindTheKthElement {
         left = partition + 1;
       }
     }
-    return value;
+    return partition;
   }
 
   public static <T> T findKthItem(
       List<T> values, int k, int start, int end, Comparator<T> comparator) {
-    T value = null;
+    int kthItemIndex = findKthItemIndex(values, k, start, end, comparator);
+    return values.get(kthItemIndex);
+  }
+
+  public static <T> int findKthItemIndex(
+          List<T> values, int k, int start, int end, Comparator<T> comparator) {
+    int partition = start;
     int left = start;
     int right = end;
     while (left <= right) {
-      int partition = partition(values, left, right, comparator);
+        partition = partition(values, left, right, comparator);
       if (partition - start == k - 1) {
-        value = values.get(partition);
+
         break;
       } else if (partition - start > k - 1) {
         right = partition - 1;
@@ -109,7 +126,7 @@ public class FindTheKthElement {
         left = partition + 1;
       }
     }
-    return value;
+    return partition;
   }
 
   public static int partition(int[] values, int start, int end, Comparator<Integer> comparator) {

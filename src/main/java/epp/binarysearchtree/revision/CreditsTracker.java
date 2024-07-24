@@ -107,13 +107,18 @@ public class CreditsTracker {
          return null;
     }
 
-    private static class Client implements Comparable<Client>{
+    private static class Client implements Comparable<Client>,Cloneable{
         String name;
         int credits;
 
         public Client(String name, int credits) {
             this.name = name;
             this.credits = credits;
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            return super.clone();
         }
 
         @Override

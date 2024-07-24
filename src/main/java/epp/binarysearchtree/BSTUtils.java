@@ -255,7 +255,7 @@ public class BSTUtils {
      * @param <T>
      */
 
-    public static<T extends Comparable<T>> BinaryTreeNode<T> deleteNode(BinaryTreeNode<T> root,
+    public static<T extends Cloneable & Comparable<T>> BinaryTreeNode<T> deleteNode(BinaryTreeNode<T> root,
                                                                                    T value) {
 
         if (value.compareTo(root.data) == 0 && value.equals( root.data )) {
@@ -266,7 +266,8 @@ public class BSTUtils {
                 return root.left;
             }
             BinaryTreeNode<T> minNode = BinaryTreeUtils.getMinNode(root.right);
-            root.data = minNode.data;
+            // we shd clone the data, existing refs might manipulate it
+            root.data =cloneItem(minNode.data)  ;
             root.right = deleteNode(root.right, minNode.data);
 
         } else if (value.compareTo(root.data) >= 0) {
@@ -286,10 +287,12 @@ public class BSTUtils {
      * @return
      * @param <T>
      */
-    public static<T extends Comparable<T>> BinaryTreeNode<T> deleteNode(BinaryTreeNode<T> root,
+    public static<T extends Cloneable & Comparable<T>> BinaryTreeNode<T> deleteNode(BinaryTreeNode<T> root,
                                                                         BinaryTreeNode<T> node) {
 
-        if (node.data.compareTo(root.data) == 0 && node==root) {
+    System.out.println(root.data +" "+ node.data);
+
+        if (node.data.compareTo(root.data) == 0 && node.data.equals(root.data)) {
             if (root.left == null) {
                 return root.right;
             }
@@ -297,7 +300,8 @@ public class BSTUtils {
                 return root.left;
             }
             BinaryTreeNode<T> minNode = BinaryTreeUtils.getMinNode(root.right);
-            root.data = minNode.data;
+            // we shd clone the data, existing refs might manipulate it
+            root.data =cloneItem(minNode.data) ;
             root.right = deleteNode(root.right, minNode);
 
         } else if (node.data.compareTo(root.data) >= 0) {
@@ -307,6 +311,15 @@ public class BSTUtils {
         }
 
         return root;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static<T extends Cloneable & Comparable<T>> T cloneItem(T item) {
+        try {
+            return (T) item.getClass().getMethod("clone").invoke(item);
+        } catch (Exception e) {
+            throw new RuntimeException("Clone not supported", e);
+        }
     }
 
 }

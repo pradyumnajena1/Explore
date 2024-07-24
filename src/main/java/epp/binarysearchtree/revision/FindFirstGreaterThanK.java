@@ -14,11 +14,17 @@ public class FindFirstGreaterThanK {
     System.out.println(value);
     BinaryTreeNode<Integer> node = findFirstGreaterThanK(root, value);
     System.out.println(node);
+    node = findFirstGreaterThanK2(root, value);
+    System.out.println(node);
 
     node = findLastSmallerThanK(root, value);
     System.out.println(node);
+    node = findLastSmallerThanK2(root, value);
+    System.out.println(node);
 
     node = findFirstEqualToK(root, value);
+    System.out.println(node);
+    node = findFirstEqualToK2(root, value);
     System.out.println(node);
   }
 
@@ -35,6 +41,17 @@ public class FindFirstGreaterThanK {
       }
     }
     return firstSoFar;
+  }
+  public static BinaryTreeNode<Integer> findFirstGreaterThanK2(
+          BinaryTreeNode<Integer> root, int value) {
+    if(root == null){
+      return null;
+    }
+    if(root.data>value){
+      BinaryTreeNode<Integer> leftResult = findFirstGreaterThanK2(root.left, value);
+      return leftResult==null?root:leftResult;
+    }
+    return findFirstGreaterThanK2(root.right, value);
   }
 
   public static BinaryTreeNode<Integer> findFirstEqualToK(
@@ -53,6 +70,17 @@ public class FindFirstGreaterThanK {
     }
     return firstSoFar;
   }
+  public static BinaryTreeNode<Integer> findFirstEqualToK2(
+          BinaryTreeNode<Integer> root, int value) {
+    if(root == null){
+      return null;
+    }
+    if(root.data==value){
+      BinaryTreeNode<Integer> leftResult = findFirstEqualToK2(root.left, value);
+      return leftResult==null?root:leftResult;
+    }
+    return findFirstEqualToK2(root.right, value);
+  }
 
   public static BinaryTreeNode<Integer> findLastSmallerThanK(
           BinaryTreeNode<Integer> root, int value) {
@@ -67,5 +95,17 @@ public class FindFirstGreaterThanK {
       }
     }
     return lastSoFar;
+  }
+
+  public static BinaryTreeNode<Integer> findLastSmallerThanK2(
+          BinaryTreeNode<Integer> root, int value) {
+    if(root == null){
+      return null;
+    }
+    if(root.data < value) {
+      BinaryTreeNode<Integer> rightResult = findLastSmallerThanK2(root.right, value);
+      return  rightResult==null ? root : rightResult;
+    }
+    return findLastSmallerThanK2(root.left, value);
   }
 }
