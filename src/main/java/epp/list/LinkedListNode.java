@@ -17,6 +17,10 @@ public class LinkedListNode<T> {
     this.data = data;
   }
 
+  public static void main(String[] args) {
+    System.out.println(createList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+  }
+
   public static <T> int getLength(LinkedListNode<T> list1) {
     int size = 0;
     LinkedListNode<T> current = list1;
@@ -33,7 +37,7 @@ public class LinkedListNode<T> {
     LinkedListNode<T> slowPtr = list;
     LinkedListNode<T> prev = null;
 
-    while (fastPtr!= null && fastPtr.next!= null) {
+    while (fastPtr != null && fastPtr.next != null) {
       prev = slowPtr;
       slowPtr = slowPtr.next;
       fastPtr = fastPtr.next.next;
@@ -98,20 +102,14 @@ public class LinkedListNode<T> {
   }
 
   public static <T> LinkedListNode<T> createList(List<T> values) {
-    LinkedListNode<T> head = null;
-    LinkedListNode<T> current = null;
-    LinkedListNode<T> prev = null;
+    LinkedListNode<T> head,tail;
+     tail = head = new LinkedListNode<>(null);
 
     for (int i = 0; i < values.size(); i++) {
-      current = new LinkedListNode<T>(values.get(i));
-      if (head == null) {
-        head = prev = current;
-      } else {
-        prev.next = current;
-        prev = current;
-      }
+      tail.next = new LinkedListNode<T>(values.get(i));
+      tail = tail.next;
     }
-    return head;
+    return head.next;
   }
 
   public String toString() {

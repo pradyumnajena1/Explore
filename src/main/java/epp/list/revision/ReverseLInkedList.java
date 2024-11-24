@@ -12,12 +12,12 @@ public class ReverseLInkedList {
         System.out.println(reversedListNode);
     }
 
-    public static LinkedListNode<Integer> reverseList(LinkedListNode<Integer> linkedListNode) {
-       LinkedListNode<Integer> prev = null;
-       LinkedListNode<Integer> current = linkedListNode;
+    public static <T> LinkedListNode<T> reverseList(LinkedListNode<T> linkedListNode) {
+       LinkedListNode<T> prev = null;
+       LinkedListNode<T> current = linkedListNode;
 
        while (current!=null){
-           LinkedListNode<Integer> next = current.next;
+           LinkedListNode<T> next = current.next;
            current.next = prev;
            prev = current;
            current = next;

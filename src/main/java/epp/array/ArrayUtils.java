@@ -36,6 +36,12 @@ public class ArrayUtils {
         array[i] = array[j];
         array[j] = temp;
     }
+
+    public static void swap(int[][] array, int i, int j,int x,int y) {
+        int temp = array[i][j];
+        array[i][j] = array[x][y];
+        array[x][y] = temp;
+    }
     public static void swap(char[] array, int i, int j) {
         char temp = array[i];
         array[i] = array[j];

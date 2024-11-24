@@ -42,7 +42,7 @@ public class GenericSegmentTree<T> {
             b = b / 2;
         }
         this.segmentTree = segmentTree;
-        // printTree( );
+         printTree( );
     }
 
     public   void printTree( ) {

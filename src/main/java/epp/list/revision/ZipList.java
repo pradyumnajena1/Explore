@@ -32,11 +32,10 @@ public class ZipList {
             secondPtr.next = null;
             if(resultHeadPtr==null){
                 resultHeadPtr = firstPtr;
-                resultTailPtr = secondPtr;
             }else{
                 resultTailPtr.next = firstPtr;
-                resultTailPtr = secondPtr;
             }
+            resultTailPtr = secondPtr;
 
 
             firstPtr = firstPtrNxt;

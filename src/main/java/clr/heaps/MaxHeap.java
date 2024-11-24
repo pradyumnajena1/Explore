@@ -69,7 +69,7 @@ public class MaxHeap<T extends Comparable<T>> {
 
 
     }
-    private   void maxHeapIncreaseKey(int index,T value) {
+    public    void maxHeapIncreaseKey(int index,T value) {
         if(index>size){
             throw new IndexOutOfBoundsException("Index is out of bounds");
         }
@@ -78,6 +78,17 @@ public class MaxHeap<T extends Comparable<T>> {
         }
         elements[index] = value;
         maxHeapifyUp(index);
+    }
+
+    public    void maxHeapDeleteKey(int index ) {
+        if(index>size){
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+        T value = elements[index];
+        elements[index] = elements[size];
+        size--;
+        maxHeapifyDown(index);
+
     }
 
     private void maxHeapifyUp(int index) {

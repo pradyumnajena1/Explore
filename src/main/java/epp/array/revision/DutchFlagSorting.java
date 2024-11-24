@@ -21,7 +21,7 @@ public class DutchFlagSorting {
         sort(people);
         ArrayUtils.printArray(people);
 
-        int[] values = {1, 4, 2, 3, 3, 2, 1, 4};
+        int[] values = {1, 4, 2, 3, 3, 2, 1,1,1,3,3,2,2,3, 4};
         dutchFlagSortWithFourValues(values);
         ArrayUtils.printArray(values);
     }
@@ -30,6 +30,7 @@ public class DutchFlagSorting {
         int pivot = values[index];
         int sp=0,ep = 0;
         int bp = values.length-1;
+        // undiscovered elements within ep to bp inclusive
         while (ep<=bp){
             if(values[ep]<pivot){
                 ArrayUtils.swap(values,sp,ep);
@@ -54,10 +55,12 @@ public class DutchFlagSorting {
 
       int ap=0,bp = 0,cp=0;
       int dp = values.length-1;
+      // undiscovered elements within cp to dp inclusive
       while (cp<=dp){
           if(values[cp]==1){
               ArrayUtils.swap(values,ap,cp);
               ap++;
+              ArrayUtils.swap(values,bp,cp);
               bp++;
               cp++;
 
@@ -67,9 +70,7 @@ public class DutchFlagSorting {
               cp++;
           }else if(values[cp]==3){
               cp++;
-          }
-
-          else{
+          } else{
               ArrayUtils.swap(values,cp,dp);
               dp--;
           }

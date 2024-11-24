@@ -18,14 +18,19 @@ public class AndXorOr {
         public MinMin(int min, int secondMin) {
             this.min = min;
             this.secondMin = secondMin;
-            this.andOrXor =  getAndXorOr();
+            this.andOrXor = this.secondMin==Integer.MAX_VALUE?0:  andXorOr();
         }
         public MinMin(int min) {
             this.min = min;
-            this.secondMin = Integer.MAX_VALUE;
-            this.andOrXor =  0;
+            this.secondMin = min;
+            this.andOrXor = 0;
         }
-        private     int getAndXorOr( ) {
+
+        public int getAndOrXor() {
+            return andOrXor;
+        }
+
+        private     int andXorOr( ) {
             int or =  min |  secondMin;
             int and =  min &  secondMin;
             int xor =  min ^  secondMin;
@@ -34,13 +39,23 @@ public class AndXorOr {
         }
         public static MinMin merge(MinMin a,MinMin b){
             MinMin merged = null;
-            if(a.min<b.min){
-                merged = new MinMin(a.min,Math.min(a.secondMin, b.min));
+            if(a.min <b.min){
+                merged = new MinMin(a.min, a.min==a.secondMin ? b.min :  Math.min(a.secondMin, b.min));
             }else{
-                merged= new MinMin(b.min,Math.min(a.min, b.secondMin));
+                merged= new MinMin(b.min,  b.min==b.secondMin ? a.min :   Math.min(a.min, b.secondMin));
             }
-            merged.andOrXor =Math.max(merged.andOrXor,  Math.max(a.andOrXor,b.andOrXor));
-            return merged;
+            MinMin result = merged;
+
+            if(a.andOrXor>result.andOrXor ){
+                result.andOrXor = a.andOrXor;
+            }
+            if(b.andOrXor>result.andOrXor ){
+                result.andOrXor = b.andOrXor;
+            }
+
+
+
+            return result;
 
         }
 
@@ -61,18 +76,11 @@ public class AndXorOr {
     public static int andXorOr(List<Integer> a) {
         // Write your code here
         List<MinMin> minMins = a.stream().map(MinMin::new).collect(toList());
-        GenericSegmentTree<MinMin> segmentTree = new GenericSegmentTree<>(minMins,MinMin::merge,new MinMin(Integer.MAX_VALUE));
+        GenericSegmentTree<MinMin> segmentTree = new GenericSegmentTree<>(minMins,MinMin::merge,
+                new MinMin(Integer.MAX_VALUE ));
         segmentTree.printTree();
 
-        int maxValue = Integer.MIN_VALUE;
-        for(int i=0;i<a.size();i++){
-            for(int j=i+1;j<a.size();j++){
-                MinMin minMin = segmentTree.rangeResult(i, j);
-                int s = minMin.andOrXor;
-               // System.out.println(i +" " +j +" "+ minMin + " "+s);
-                maxValue = Math.max(s,maxValue);
-            }
-        }
+        int maxValue = segmentTree.rangeResult(0,a.size()-1).getAndOrXor() ;
         return maxValue;
     }
 
